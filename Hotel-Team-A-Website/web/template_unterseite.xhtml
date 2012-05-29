@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+                                     xmlns:ui="http://java.sun.com/jsf/facelets"
+                                     xmlns:h="http://java.sun.com/jsf/html"
+                                     xmlns:f="http://java.sun.com/jsf/core"
+                                     xmlns:c="http://java.sun.com/jsp/jstl/core"><!--<![endif]-->
+
+    <!-- Mirrored from www.ansonika.com/paradise/rooms.php by HTTrack Website Copier/3.x [XR&CO'2010], Wed, 23 May 2012 13:44:26 GMT -->
+    <head>
+
+        <!-- Basic Page Needs -->
+        <meta charset="utf-8"/>
+        <title>Responsive Hotel  Site template only 14$</title>
+        <meta name="description" content="Responsive Hotel  Site template"/>
+        <meta name="author" content=""/>
+        <!-- Google web font -->
+        <link href='http://fonts.googleapis.com/css?family=Terminal+Dosis|PT+Sans+Narrow:400,700|Nothing+You+Could+Do' rel='stylesheet' type='text/css'/>
+
+        <!-- Mobile Specific Metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/base.css"/>
+        <link rel="stylesheet" href="css/skeleton.css"/>
+        <link rel="stylesheet" href="css/menu.css"/>
+        <link rel="stylesheet" href="css/layout.css"/>
+        <link rel="stylesheet" href="css/calendar.css"/>
+
+        <!-- prettyPhoto plugin -->
+        <link rel="stylesheet" href="js/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen"/>
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Favicons-->
+        <link rel="shortcut icon" href="img/favicon.ico"/>
+        <link rel="apple-touch-icon" href="img/apple-touch-icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.html"/>
+        <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png"/>
+
+
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+        <!-- Exposè, tabs, accordion-->
+        <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+
+        <script src="js/jquery/jquery.ui.core.js"></script>
+        <script src="js/jquery/jquery.ui.datepicker.js"></script>
+        <link rel="stylesheet" href="css/jquery.ui.datepicker.css"/>
+
+        <script>
+            $(function() {
+                $( ".special" ).datepicker();
+            });
+        </script>
+
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class=" four columns" id="logo"><a href="index.xhtml">Paradise hotel</a></div>
+                <div class="twelve columns">
+                    <ul id="lang">
+                        <li>En</li>
+                        <li><a href="#">Fr</a></li>
+                        <li><a href="#">Es</a></li>
+                    </ul>
+                    <div id="wxWrap"><span id="wxIntro">Palma, Spain</span><span id="wxIcon2"></span><span id="wxTemp"></span></div><!-- weather -->
+                </div>
+                <!-- start main nav -->
+                <div class="twelve columns">
+                    <nav>
+                        <ul id="main-nav" class="sf-menu">
+                            <ui:include src="/navigation.xhtml"/>
+                        </ul>
+                    </nav><!-- end main nav -->
+                </div><!-- end twelve -->
+            </div><!-- end container -->
+        </header><!-- end header-->
+
+        <ui:insert name="content" />
+
+        <footer>
+            <div class="container">
+                <nav class="eleven columns">
+                    <ul id="nav-footer">
+                        <ui:include src="/navigation.xhtml"/>
+                    </ul>
+                </nav>
+                <div class="five columns copy">© 2012 Paradise Hotel. All Rights Reserved.</div>
+            </div>
+        </footer><!-- footer  -->
+
+        <!-- JQUERY plugins: Moderniz, Prettyphoto, Flexislider, MobileMenu, SuperfishMenu, Weather, Tooltip-->	
+        <script type="text/javascript"  src="js/plug_ins.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/google_map.js"></script>
+        <script src="js/functions.js"></script>
+    </body>
+</html>
