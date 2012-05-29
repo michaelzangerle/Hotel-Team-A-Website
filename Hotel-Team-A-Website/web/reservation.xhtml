@@ -13,68 +13,84 @@
                 </h1>
             </div>
             <div class="sixteen columns">
-                <h:form>
-                    <div class="formElement">
-                        <label for="datepickerStart">Arrival</label>
-                        <h:inputText required="true" class="special" requiredMessage="Bitte ausfüllen!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+                <h:form class="reservationForm">
+                    
+                    <fieldset>
+                        <legend>Timespan</legend>
+                        <div class="formElement">
+                            <label for="datepickerStart">Arrival</label>
+                            <h:inputText required="true" class="special" requiredMessage="Bitte ausfüllen!" id="datepickerStart" value="#{reservationManager.arrival}"/>
 
-                    </div>
-                    <div class="formElement">
-                        <label for="datepickerEnd">Departure</label>
-                        <h:inputText required="true" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="firstname">Firstname:</label>
-                        <h:inputText required="true" id="firstname"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="lastname">Lastname:</label>
-                        <h:inputText required="true" id="lastname"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="email">E-Mail:</label>
-                        <h:inputText required="true" id="email"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">Telephone:</label>
-                        <h:inputText required="true" id="telephone"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">Street:</label>
-                        <h:inputText required="true" id="street"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">Postcode:</label>
-                        <h:inputText required="true" id="postcode"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">Country:</label>
-                        <h:inputText required="true" id="country"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">City:</label>
-                        <h:inputText required="true" id="city"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">IBAN:</label>
-                        <h:inputText required="true" id="iban"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">BIC:</label>
-                        <h:inputText required="true" id="bic"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">BLZ:</label>
-                        <h:inputText required="true" id="blz"/>
-                    </div>
-                    <div class="formElement">
-                        <label for="telephone">Account-Number</label>
-                        <h:inputText required="true" id="accountNumber"/>
-                    </div>
+                        </div>
+                        <div class="formElement">
+                            <label for="datepickerEnd">Departure</label>
+                            <h:inputText required="true" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                        </div>
+                    </fieldset>
+                    <hr />
+                    <fieldset>
+                        <legend>Personal Information</legend>
+                        <div class="formElement">
+                            <label for="firstname">Firstname:</label>
+                            <h:inputText required="true" id="firstname"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="lastname">Lastname:</label>
+                            <h:inputText required="true" id="lastname"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="email">E-Mail:</label>
+                            <h:inputText required="true" id="email"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">Telephone:</label>
+                            <h:inputText required="true" id="telephone"/>
+                        </div>
+                    </fieldset>
+                    <hr />
+                    <fieldset>
+                        <legend>Address</legend>
+                        <div class="formElement">
+                            <label for="telephone">Street:</label>
+                            <h:inputText required="true" id="street"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">Postcode:</label>
+                            <h:inputText required="true" id="postcode"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">Country:</label>
+                            <h:inputText required="true" id="country"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">City:</label>
+                            <h:inputText required="true" id="city"/>
+                        </div>
+                    </fieldset>
+                    <hr />
+                    <fieldset>
+                        <legend>Bankdetails</legend>
+                        <div class="formElement">
+                            <label for="telephone">IBAN:</label>
+                            <h:inputText required="true" id="iban"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">BIC:</label>
+                            <h:inputText required="true" id="bic"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">BIN:</label>
+                            <h:inputText required="true" id="bin"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="telephone">Account-Number</label>
+                            <h:inputText required="true" id="accountNumber"/>
+                        </div>
+                    </fieldset>
 
 
 
-                    <h:commandButton action="#{reservationManager.stepOne()}" value="Send" />
+                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 2" />
                 </h:form>
             </div>
         </div>

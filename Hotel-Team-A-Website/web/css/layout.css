@@ -204,4 +204,23 @@ body.full #slidecaption span{ color:#999; display:block; font-size:0.60em; margi
 }
 
 
-div.formElement{}
+div.formElement{
+    float:left;
+    width:50%;
+    
+}
+
+.reservationForm fieldset legend  {
+    font-size: 20px;
+    line-height:160%;
+}
+
+.reservationForm input  {
+    width: 80%;
+}
+
+
+.reservationForm input[type=submit]  {
+    width: 100px;
+}
+
