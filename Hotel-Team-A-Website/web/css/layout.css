@@ -210,6 +210,10 @@ div.formElement{
     
 }
 
+.reservationForm fieldset  {
+    padding: 10px 0;
+}
+
 .reservationForm fieldset legend  {
     font-size: 20px;
     line-height:160%;
@@ -217,6 +221,7 @@ div.formElement{
 
 .reservationForm input  {
     width: 80%;
+    margin-bottom:10px;
 }
 
 
@@ -224,3 +229,12 @@ div.formElement{
     width: 100px;
 }
 
+.validation {
+    background:#f6cbca;
+    border: 1px solid #cb2026;
+    color:#cb2026;
+    padding: 5px;
+    display:inline-block;
+    margin-bottom:5px;
+    
+}
