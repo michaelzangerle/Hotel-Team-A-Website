@@ -14,50 +14,65 @@
             </div>
             <div class="sixteen columns">
                 <h:form>
+                    <div class="formElement">
+                        <label for="datepickerStart">Arrival</label>
+                        <h:inputText required="true" class="special" requiredMessage="Bitte ausfüllen!" id="datepickerStart" value="#{reservationManager.arrival}"/>
 
-                    <table cellpadding="0" cellspacing="0">
-                        
-                        <label for="datepicker">Anreise:</label>
-                        <h:inputText class="special" id="datepickerStart"/>
-                        
-                        <label for="datepicker">Abreise:</label>
-                        <h:inputText class="special" id="datepickerEnd"/>
-                        
-                        <tr>
-                            <td class="first">
-                                Anreise Datum:<br />
-                                <h:selectOneListbox value="#{reservationManager.departureMonth}" size="1">
-                                    <f:selectItems value="#{dataConstants.monthList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />  
-                                </h:selectOneListbox>
-                            </td>
+                    </div>
+                    <div class="formElement">
+                        <label for="datepickerEnd">Departure</label>
+                        <h:inputText required="true" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="firstname">Firstname:</label>
+                        <h:inputText required="true" id="firstname"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="lastname">Lastname:</label>
+                        <h:inputText required="true" id="lastname"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="email">E-Mail:</label>
+                        <h:inputText required="true" id="email"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">Telephone:</label>
+                        <h:inputText required="true" id="telephone"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">Street:</label>
+                        <h:inputText required="true" id="street"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">Postcode:</label>
+                        <h:inputText required="true" id="postcode"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">Country:</label>
+                        <h:inputText required="true" id="country"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">City:</label>
+                        <h:inputText required="true" id="city"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">IBAN:</label>
+                        <h:inputText required="true" id="iban"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">BIC:</label>
+                        <h:inputText required="true" id="bic"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">BLZ:</label>
+                        <h:inputText required="true" id="blz"/>
+                    </div>
+                    <div class="formElement">
+                        <label for="telephone">Account-Number</label>
+                        <h:inputText required="true" id="accountNumber"/>
+                    </div>
 
 
-                            <td class="second"><br />
-                                <h:selectOneListbox value="#{reservationManager.arivalDay}" size="1">
-                                    <f:selectItems value="#{dataConstants.dayList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />
-                                </h:selectOneListbox>
-                                <h:selectOneListbox value="#{reservationManager.arivalYear}" size="1">
-                                    <f:selectItems value="#{dataConstants.yearList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />
-                                </h:selectOneListbox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Abreise Datum<br />
-                                <h:selectOneListbox value="#{reservationManager.departureMonth}" size="1">
-                                    <f:selectItems value="#{dataConstants.monthList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />
-                                </h:selectOneListbox>
-                            </td>
-                            <td class="second"><br />
-                                <h:selectOneListbox value="#{reservationManager.departureDay}" size="1">
-                                    <f:selectItems value="#{dataConstants.dayList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />
-                                </h:selectOneListbox>
-                                <h:selectOneListbox value="#{reservationManager.departureYear}" size="1">
-                                    <f:selectItems value="#{dataConstants.yearList}" var="p" itemLabel="#{p.label}" itemValue="#{p.value}" />
-                                </h:selectOneListbox>
-                            </td>
-                        </tr>		
-                    </table>  
 
                     <h:commandButton action="#{reservationManager.stepOne()}" value="Send" />
                 </h:form>

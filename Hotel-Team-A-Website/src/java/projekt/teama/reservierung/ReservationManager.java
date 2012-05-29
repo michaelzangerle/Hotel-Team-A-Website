@@ -6,9 +6,8 @@ package projekt.teama.reservierung;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import projekt.fhv.teama.classes.zimmer.IKategorie;
 
@@ -18,123 +17,48 @@ import projekt.fhv.teama.classes.zimmer.IKategorie;
  */
 @ManagedBean
 @SessionScoped
-public class ReservationManager {
+public class ReservationManager implements Serializable{
 
-	
-	 private Integer arivalYear;
-	 private Integer arivalMonth;
-	 private Integer arivalDay;
-	 private Integer departureYear;
-	 private Integer departureMonth;
-	 private Integer departureDay;
-	 private Integer packageID = null;
-	 
-	 private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
-	 
-	 
-	    public ReservationManager() {
-	        arivalYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
-	        arivalMonth = Integer.parseInt(new SimpleDateFormat("MM").format(new Date()));
-	        arivalDay = Integer.parseInt(new SimpleDateFormat("dd").format(new Date()));
-
-	        departureYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
-	        departureMonth = Integer.parseInt(new SimpleDateFormat("MM").format(new Date()));
-	        departureDay = Integer.parseInt(new SimpleDateFormat("dd").format(new Date()));
-	    }
-            
-
-	 
-	 
-	 public Integer getArivalYear() {
-		return arivalYear;
-	}
+    private String arrival;
+    private String departure;
 
 
+    private Integer packageID = null;
+    private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
 
-	public void setArivalYear(Integer arivalYear) {
-		this.arivalYear = arivalYear;
-	}
+    public ReservationManager() {
 
+    }
 
+    public String getArrival() {
+        return arrival;
+    }
 
-	public Integer getArivalMonth() {
-		return arivalMonth;
-	}
+    public void setArrival(String arrival) {
+        this.arrival = arrival;
+    }
 
+    public String getDeparture() {
+        return departure;
+    }
 
+    public void setDeparture(String departure) {
+        this.departure = departure;
+    }
 
-	public void setArivalMonth(Integer arivalMonth) {
-		this.arivalMonth = arivalMonth;
-	}
+    public Integer getPackageID() {
+        return packageID;
+    }
 
+    public void setPackageID(Integer packageID) {
+        this.packageID = packageID;
+    }
 
-
-	public Integer getArivalDay() {
-		return arivalDay;
-	}
-
-
-
-	public void setArivalDay(Integer arivalDay) {
-		this.arivalDay = arivalDay;
-	}
-
-
-
-	public Integer getDepartureYear() {
-		return departureYear;
-	}
-
-
-
-	public void setDepartureYear(Integer departureYear) {
-		this.departureYear = departureYear;
-	}
-
-
-
-	public Integer getDepartureMonth() {
-		return departureMonth;
-	}
-
-
-
-	public void setDepartureMonth(Integer departureMonth) {
-		this.departureMonth = departureMonth;
-	}
-
-
-
-	public Integer getDepartureDay() {
-		return departureDay;
-	}
-
-
-
-	public void setDepartureDay(Integer departureDay) {
-		this.departureDay = departureDay;
-	}
-
-
-
-	public Integer getPackageID() {
-		return packageID;
-	}
-
-
-
-	public void setPackageID(Integer packageID) {
-		this.packageID = packageID;
-	}
-
-
-
-	public String stepOne() {
-		System.out.println("Test");
+    public String stepOne() {
+        System.out.println("Test");
         return "Ok";
     }
- 
-    
+
 //    public List<KategorieAuswahl> getCategories() {
 //        List<KategorieAuswahl> list = new ArrayList<KategorieAuswahl>();
 ////        for (IKategorie categorie : KategorieDao.getInstance().getAll()) {
@@ -143,8 +67,6 @@ public class ReservationManager {
 //        
 //        return list;
 //    }
-	
-	
 //    public Integer getFreieZimmerAnzahl(IKategorie categorie) {
 ////        try {
 ////        	java.sql.Date arival = new java.sql.Date(dateformatter.parse(arivalDay + "/" + arivalMonth + "/" + arivalYear).getTime());
@@ -165,7 +87,6 @@ public class ReservationManager {
 //        	
 //        	return 1;
 //    }
-	
     public class KategorieAuswahl {
 
         private IKategorie cat;
@@ -192,8 +113,4 @@ public class ReservationManager {
             this.cat = cat;
         }
     }
-	
-	
-	
 }
-
