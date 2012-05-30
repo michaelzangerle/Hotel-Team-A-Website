@@ -12,13 +12,17 @@ import javax.faces.bean.SessionScoped;
 import projekt.fhv.teama.classes.zimmer.IKategorie;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projekt.fhv.teama.classes.personen.IAdresse;
 import projekt.fhv.teama.classes.personen.Land;
 import projekt.fhv.teama.classes.personen.ILand;
 import projekt.fhv.teama.classes.personen.IGast;
 import projekt.fhv.teama.hibernate.dao.personen.GastDao;
 import projekt.fhv.teama.hibernate.dao.personen.IGastDao;
+import projekt.fhv.teama.hibernate.dao.personen.ILandDao;
+import projekt.fhv.teama.hibernate.dao.personen.LandDao;
 import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
 import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
@@ -48,7 +52,7 @@ public class ReservationManager implements Serializable {
     //Addressdaten
     private String street;
     private String postcode;
-    private String country;
+    private Integer country;
     private String city;
     private String iban;
     private String bic;
@@ -63,12 +67,19 @@ public class ReservationManager implements Serializable {
  
     public ReservationManager() {
         try {
-//            IModelLand ml = new ModelLand();
-//            ILand l = ml.getLandByKuerzel("AT");
-//            this.country = l.getBezeichnung();
           IGastDao g = GastDao.getInstance();
           gast=g.getById(48);
+          
           this.firstname=gast.getFirstname();
+          this.lastname=gast.getNachname();
+          this.email=gast.getEmail();
+          this.tel=gast.getTelefonnummer();
+          List<IAdresse> adr=new Vector<IAdresse>(gast.getAdressen());
+          this.street=adr.get(0).getStrasse();
+          this.postcode=adr.get(0).getPlz();
+          this.city=adr.get(0).getOrt();
+          
+          
         } catch (Exception ex) {
             ex.printStackTrace();
             gast=null;
@@ -136,11 +147,11 @@ public class ReservationManager implements Serializable {
         this.city = city;
     }
 
-    public String getCountry() {
+    public Integer getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Integer country) {
         this.country = country;
     }
 
@@ -214,7 +225,7 @@ public class ReservationManager implements Serializable {
         List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
         try {
             for (IKategorie category : KategorieDao.getInstance().getAll()) {
-                list.add(new CategoryWrapper(category, 0, getFreieZimmerAnzahl(category)));
+                list.add(new CategoryWrapper(category, 0, getAvailableRooms(category)));
             }
         } catch (DatabaseException ex) {
             Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -223,7 +234,7 @@ public class ReservationManager implements Serializable {
         return list;
     }
 
-    public Integer getFreieZimmerAnzahl(IKategorie category) {
+    public Integer getAvailableRooms(IKategorie category) {
         try {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
@@ -287,4 +298,17 @@ public class ReservationManager implements Serializable {
 
     }
 //</editor-fold>
+
+    
+    public List<ILand> getCountries()
+    {
+        ILandDao landDao=LandDao.getInstance();
+        List<ILand> countriesInDatabase=new Vector<ILand>();
+        try {
+           countriesInDatabase =new Vector<ILand>(landDao.getAll());
+           return countriesInDatabase;
+        } catch (DatabaseException ex) {
+           return countriesInDatabase;
+        }
+    }
 }
