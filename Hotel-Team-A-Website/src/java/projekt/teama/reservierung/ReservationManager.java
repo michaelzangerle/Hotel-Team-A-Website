@@ -287,6 +287,35 @@ public class ReservationManager implements Serializable {
         }
     }
 
+    public class CountryWrapper{
+    
+        private Integer countryId;
+        private String description;
+
+        public CountryWrapper(Integer countryId, String description) {
+            this.countryId = countryId;
+            this.description = description;
+        }
+
+        public Integer getCountryId() {
+            return countryId;
+        }
+
+        public void setCountryId(Integer countryId) {
+            this.countryId = countryId;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+        
+        
+    }
+    
     private String dateAdapter(String str) {
         String[] temp = new String[10];
         String delimiter = "/";
@@ -300,15 +329,19 @@ public class ReservationManager implements Serializable {
 //</editor-fold>
 
     
-    public List<ILand> getCountries()
+    public List<CountryWrapper> getCountries()
     {
         ILandDao landDao=LandDao.getInstance();
         List<ILand> countriesInDatabase=new Vector<ILand>();
+        List<CountryWrapper> countries=new Vector<CountryWrapper>();
         try {
-           countriesInDatabase =new Vector<ILand>(landDao.getAll());
-           return countriesInDatabase;
+           countriesInDatabase=new Vector<ILand>(landDao.getAll());
+            for (ILand country : countriesInDatabase) {
+                countries.add(new CountryWrapper(country.getID(), country.getBezeichnung()));
+            }
+           return countries;
         } catch (DatabaseException ex) {
-           return countriesInDatabase;
+           return countries;
         }
     }
 }
