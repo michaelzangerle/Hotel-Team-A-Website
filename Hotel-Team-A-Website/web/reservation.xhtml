@@ -74,7 +74,9 @@
                         </div>
                         <div class="formElement">
                             <label for="country">Country:</label>
-                            <h:inputText required="true" id="country" requiredMessage="Please insert a country!" value="#{reservationManager.country}"/>
+                            <h:selectOneListbox label="country" size="1" required="true" requiredMessage="Please insert a country!" value="${reservationManager.country}">
+                                <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
+                            </h:selectOneListbox>
                             <h:message class="validation" for="country"/>
                         </div>
                         <div class="formElement">

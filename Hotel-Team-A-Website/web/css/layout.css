@@ -219,6 +219,7 @@ div.formElement{
     line-height:160%;
 }
 
+.reservationForm select,
 .reservationForm input  {
     width: 80%;
     margin-bottom:10px;
