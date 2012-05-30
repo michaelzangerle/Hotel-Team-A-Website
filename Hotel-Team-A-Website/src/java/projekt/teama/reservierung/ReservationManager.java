@@ -182,69 +182,71 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
-//    public List<KategorieAuswahl> getCategories() {
-//        List<KategorieAuswahl> list = new ArrayList<KategorieAuswahl>();
-////        for (IKategorie categorie : KategorieDao.getInstance().getAll()) {
-////            list.add(new KategorieAuswahl(categorie, 0));
-////        }
-//        
-//        return list;
-//    }
-//    public Integer getFreieZimmerAnzahl(IKategorie categorie) {
-////        try {
-////        	java.sql.Date arival = new java.sql.Date(dateformatter.parse(arivalDay + "/" + arivalMonth + "/" + arivalYear).getTime());
-////            java.sql.Date departure = new java.sql.Date(dateformatter.parse(departureDay + "/" + departureMonth + "/" + departureYear).getTime());
-////            
-////            ModelZimmer modelzimmer=new ModelZimmer();
-////            
-////          return  modelzimmer.getVerfügbareZimmer(categorie, arival, departure).size();
-//        	
+    public List<CategoryWrapper> getCategories() {
+        List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
+        for (IKategorie category : KategorieDao.getInstance().getAll()) {
+            list.add(new CategoryWrapper(category, 0,getFreieZimmerAnzahl(category)));
+        }
+        
+        return list;
+    }
+    public Integer getFreieZimmerAnzahl(IKategorie category) {
+//        try {
+//        	java.sql.Date arival = new java.sql.Date(dateformatter.parse(getArrival()).getTime());
+//            java.sql.Date departure = new java.sql.Date(dateformatter.parse(departureDay + "/" + departureMonth + "/" + departureYear).getTime());
 //            
-////        } catch (ParseException ex) {
-////            //TODO Auto-generated catch block
-////        	return 0;
-////        } catch (DatabaseException e) {
-////			// TODO Auto-generated catch block
-////        	return 0;
-////		}
-//        	
-//        	return 1;
-//    }
+//            ModelZimmer modelzimmer=new ModelZimmer();
+//            
+//          return  modelzimmer.getVerfügbareZimmer(category, arival, departure).size();
+        	
+            
+//        } catch (ParseException ex) {
+//            //TODO Auto-generated catch block
+//        	return 0;
+//        } catch (DatabaseException e) {
+//			// TODO Auto-generated catch block
+//        	return 0;
+//		}
+        
+        return 0;        	
+    }
+    
+    //<editor-fold defaultstate="collapsed" desc="CategoryWrapper">
     public class CategoryWrapper {
-
+        
         private IKategorie cat;
         private Integer chosenRooms;
         private Integer available;
-
+        
         public Integer getAvailable() {
             return available;
         }
-
+        
         public void setAvailable(Integer available) {
             this.available = available;
         }
-
+        
         public Integer getChosenRooms() {
             return chosenRooms;
         }
-
+        
         public void setChosenRooms(Integer chosenRooms) {
             this.chosenRooms = chosenRooms;
         }
-
-
-
-        public CategoryWrapper(IKategorie c, Integer a) {
+        
+        public CategoryWrapper(IKategorie c, Integer a, Integer b) {
             this.cat = c;
             this.chosenRooms = a;
+            this.available = b;
         }
-
+        
         public IKategorie getCat() {
             return cat;
         }
-
+        
         public void setCat(IKategorie cat) {
             this.cat = cat;
         }
     }
 }
+//</editor-fold>
