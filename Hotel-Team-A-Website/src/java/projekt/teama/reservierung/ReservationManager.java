@@ -365,7 +365,7 @@ public class ReservationManager implements Serializable {
         public void setChosenRooms(Integer chosenRooms) {
             this.chosenRooms = chosenRooms;
             for (CategoryWrapper entry : categories) {
-                if(entry.getCat().equals(this.cat))
+                if(entry.getCat().getID() == this.cat.getID())
                     entry.chosenRooms=this.chosenRooms;
             }
         }
