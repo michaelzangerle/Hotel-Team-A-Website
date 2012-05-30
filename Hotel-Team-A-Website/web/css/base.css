@@ -34,7 +34,7 @@ table{ border-collapse:collapse; border-spacing:0; width:100%;}
 
 /* #Basic Styles================================================== */
 html {height:101%;}
-body{background:#fff; color:#444; font:14px 'PT Sans Narrow',sans-serif; webkit-font-smoothing:antialiased; webkit-text-size-adjust:100%; margin-top:110px;}
+body{background:#fff; color:#444; font:16px 'PT Sans Narrow',sans-serif; webkit-font-smoothing:antialiased; webkit-text-size-adjust:100%; margin-top:110px;}
 
 /* #Typography================================================== */
 h1,h2,h3,h4,h5,h6{ color:#3b576b; font-weight:normal;}
