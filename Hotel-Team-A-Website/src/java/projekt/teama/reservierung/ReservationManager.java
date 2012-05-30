@@ -14,11 +14,16 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projekt.fhv.teama.classes.personen.Land;
+import projekt.fhv.teama.classes.personen.ILand;
 import projekt.fhv.teama.classes.personen.IGast;
 import projekt.fhv.teama.hibernate.dao.personen.GastDao;
+import projekt.fhv.teama.hibernate.dao.personen.IGastDao;
 import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
 import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
+import projekt.fhv.teama.model.ModelLand;
+import projekt.fhv.teama.model.interfaces.IModelLand;
 
 /**
  *
@@ -58,9 +63,14 @@ public class ReservationManager implements Serializable {
  
     public ReservationManager() {
         try {
-            gast=GastDao.getInstance().getById(48);
-            this.firstname=gast.getFirstname();
-        } catch (DatabaseException ex) {
+            IModelLand ml = new ModelLand();
+            ILand l = ml.getLandByKuerzel("AT");
+            this.country = l.getBezeichnung();
+//          IGastDao g = GastDao.getInstance();
+//          gast=g.getById(48);
+//          this.firstname=gast.getFirstname();
+        } catch (Exception ex) {
+            ex.printStackTrace();
             gast=null;
         }
     }
