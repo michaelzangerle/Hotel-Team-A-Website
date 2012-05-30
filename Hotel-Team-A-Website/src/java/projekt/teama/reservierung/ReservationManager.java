@@ -219,6 +219,9 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Schritte">
+     public String stepOne() {
+        return "reservation";
+    }
     public String stepTwo() {
         return "reservation2";
     }
