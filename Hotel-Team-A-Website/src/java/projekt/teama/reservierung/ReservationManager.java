@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -26,6 +26,7 @@ import projekt.fhv.teama.model.ModelZimmer;
 @SessionScoped
 public class ReservationManager implements Serializable {
 
+	//Funkt git jetzt
     //Zeitraum
     private String arrival;
     private String departure;
