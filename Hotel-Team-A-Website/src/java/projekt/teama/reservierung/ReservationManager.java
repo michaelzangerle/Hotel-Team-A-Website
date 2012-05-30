@@ -4,6 +4,7 @@
  */
 package projekt.teama.reservierung;
 
+import com.sun.faces.facelets.tag.jstl.core.ForEachHandler;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -257,9 +258,11 @@ public class ReservationManager implements Serializable {
         return "reservation2";
     }
         public String stepThree() {
-            
-            
+         
+         if(testIfRoomSelected())   
         return "reservation3";
+         else
+        return "reservation2";
     }
         
     public String finish()
@@ -271,7 +274,7 @@ public class ReservationManager implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
-        categories= new ArrayList<CategoryWrapper>();
+        categories=new Vector<CategoryWrapper>();
         IZimmerpreisDao zpDao=ZimmerpreisDao.getInstance();
         try {
             for (IKategorie category : KategorieDao.getInstance().getAll()) {                
@@ -361,6 +364,10 @@ public class ReservationManager implements Serializable {
 
         public void setChosenRooms(Integer chosenRooms) {
             this.chosenRooms = chosenRooms;
+            for (CategoryWrapper entry : categories) {
+                if(entry.getCat().equals(this.cat))
+                    entry.chosenRooms=this.chosenRooms;
+            }
         }
 
         public CategoryWrapper(IKategorie c, Integer a, Integer b,float co) {
