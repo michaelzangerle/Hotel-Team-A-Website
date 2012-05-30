@@ -63,12 +63,12 @@ public class ReservationManager implements Serializable {
  
     public ReservationManager() {
         try {
-            IModelLand ml = new ModelLand();
-            ILand l = ml.getLandByKuerzel("AT");
-            this.country = l.getBezeichnung();
-//          IGastDao g = GastDao.getInstance();
-//          gast=g.getById(48);
-//          this.firstname=gast.getFirstname();
+//            IModelLand ml = new ModelLand();
+//            ILand l = ml.getLandByKuerzel("AT");
+//            this.country = l.getBezeichnung();
+          IGastDao g = GastDao.getInstance();
+          gast=g.getById(48);
+          this.firstname=gast.getFirstname();
         } catch (Exception ex) {
             ex.printStackTrace();
             gast=null;
@@ -229,7 +229,7 @@ public class ReservationManager implements Serializable {
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
             ModelZimmer modelzimmer = new ModelZimmer();
 
-            return modelzimmer.getVerfügbareZimmer(category, ar, de).size();
+            return modelzimmer.getVerfuegbareZimmer(category, ar, de).size();
 
         } catch (ParseException ex) {
             return 0;
