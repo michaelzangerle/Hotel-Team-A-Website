@@ -34,7 +34,7 @@ table{ border-collapse:collapse; border-spacing:0; width:100%;}
 
 /* #Basic Styles================================================== */
 html {height:101%;}
-body{background:#fff; color:#444; font:14px 'PT Sans Narrow',sans-serif; webkit-font-smoothing:antialiased; webkit-text-size-adjust:100%; margin-top:110px;}
+body{background:#fff; color:#444; font:16px 'PT Sans Narrow',sans-serif; webkit-font-smoothing:antialiased; webkit-text-size-adjust:100%; margin-top:110px;}
 
 /* #Typography================================================== */
 h1,h2,h3,h4,h5,h6{ color:#3b576b; font-weight:normal;}
@@ -247,7 +247,6 @@ button::-moz-focus-inner,input::-moz-focus-inner {
 /* #Forms================================================== */
 fieldset{ margin-bottom:10px;}
 input[type="text"],input[type="password"],input[type="email"],textarea,select{ background:#fff; border:1px solid #ccc; border-radius:2px; color:#777; display:block; font:13px "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif; margin:0; margin-bottom:20px; -moz-border-radius:2px; outline:none; padding:6px 4px; -webkit-border-radius:2px; width:210px;}
-select{ padding:0;}
 input[type="text"]:focus,input[type="password"]:focus,input[type="email"]:focus,textarea:focus{ border:1px solid #cdd5da; border-radius:3px; box-shadow:0 0 3px rgba(0,0,0,.2); color:#444; -moz-border-radius:3px; -moz-box-shadow:0 0 3px rgba(0,0,0,.2); -webkit-border-radius:3px; -webkit-box-shadow:0 0 3px rgba(0,0,0,.2);}
 textarea{ min-height:60px;}
 label,legend{ display:block; font-size:13px; font-weight:bold;}

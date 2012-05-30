@@ -12,15 +12,19 @@
                     <span>Lorem ipsum dolor sit amet, per ne purto corpora, cu eam cetero dolores.</span>
                 </h1>
             </div>
-            <div class="sixteen columns">
+            <div class="eleven columns">
+
+                <h3>Hint</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+
                 <h:form class="reservationForm">
-                    
+
                     <fieldset>
                         <legend>Timespan</legend>
                         <div class="formElement">
                             <label for="datepickerStart">Arrival</label>
                             <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
-                            
+
                             <h:message class="validation" for="datepickerStart"/>
                         </div>
                         <div class="formElement">
@@ -30,7 +34,7 @@
                         </div>
                     </fieldset>
                     <hr />
-                    
+
                     <fieldset>
                         <legend>Personal Information</legend>
                         <div class="formElement">
@@ -55,7 +59,7 @@
                         </div>
                     </fieldset>
                     <hr />
-                    
+
                     <fieldset>
                         <legend>Address</legend>
                         <div class="formElement">
@@ -70,7 +74,9 @@
                         </div>
                         <div class="formElement">
                             <label for="country">Country:</label>
-                            <h:inputText required="true" id="country" requiredMessage="Please insert a country!" value="#{reservationManager.country}"/>
+                            <h:selectOneListbox label="country" size="1" required="true" requiredMessage="Please insert a country!" value="${reservationManager.country}">
+                                <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
+                            </h:selectOneListbox>
                             <h:message class="validation" for="country"/>
                         </div>
                         <div class="formElement">
@@ -79,10 +85,30 @@
                             <h:message class="validation" for="city"/>
                         </div>
                     </fieldset>
-                    
+
                     <h:commandButton action="#{reservationManager.stepOne()}" value="Step 2" />
                 </h:form>
+
+                <p><br /></p>
+
             </div>
+
+            <section class="five columns omega">
+
+                <!-- start check avail-->
+                <div id="check_avail" class="add-bottom">
+                    <h3>Book by phone</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, pellentesque amet adipiscing scelerisque, vitae urna aenean, justo malesuada at eu, orci varius risus luctus enim a malesuada.
+                    </p>
+                    <p>
+                        <strong>0044 439 4243 </strong><br />
+                        Monday to Friday 9.00am - 22.00pm
+                    </p>
+                </div><!-- end check avail-->
+
+            </section>
+
         </div>
     </ui:define>
 </ui:composition>
