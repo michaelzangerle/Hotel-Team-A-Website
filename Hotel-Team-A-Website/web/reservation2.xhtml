@@ -19,18 +19,24 @@
                     <h:dataTable value="${reservationManager.getCategories()}" var="e" class="contentTable">
                         <h:column>
                             <f:facet name="header">Category</f:facet>
-                            ${e.} 
+                            ${e.cat.bezeichnung} 
                         </h:column>
                         <h:column>
                             <f:facet name="header">Free Rooms</f:facet>
-                            ${e.free} 
+                            ${e.available} 
                         </h:column>
-<!--                        <h:column>
+                        <h:column>
                             <f:facet name="header">Your selection</f:facet>
-
-                        </h:column>-->
+                            
+                            <h:selectOneListbox label="Anzahl" size="1">
+                                <c:forEach begin="0" end="${e.available}" var="x">
+                                    <f:selectItem itemValue="${x}" itemLabel="${x}"/>
+                                </c:forEach>
+                            </h:selectOneListbox>
+                            
+                        </h:column>
                     </h:dataTable>
-                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 2" />
+                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 3" />
                 </h:form>
             </div>
         </div>

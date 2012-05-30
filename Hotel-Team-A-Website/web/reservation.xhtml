@@ -35,22 +35,22 @@
                         <legend>Personal Information</legend>
                         <div class="formElement">
                             <label for="firstname">Firstname:</label>
-                            <h:inputText required="true" id="firstname" requiredMessage="Please insert your firstname!"/>
+                            <h:inputText required="true" id="firstname" requiredMessage="Please insert your firstname!" value="#{reservationManager.firstname}"/>
                             <h:message class="validation" for="firstname"/>
                         </div>
                         <div class="formElement">
                             <label for="lastname">Lastname:</label>
-                            <h:inputText required="true" id="lastname" requiredMessage="Please insert your lastname!"/>
+                            <h:inputText required="true" id="lastname" requiredMessage="Please insert your lastname!" #{reservationManager.lastname}/>
                             <h:message class="validation" for="lastname"/>
                         </div>
                         <div class="formElement">
                             <label for="email">E-Mail:</label>
-                            <h:inputText required="true" id="email" requiredMessage="Please insert your mail adress!"/>
+                            <h:inputText required="true" id="email" requiredMessage="Please insert your mail adress!" #{reservationManager.email}/>
                             <h:message class="validation" for="email"/>
                         </div>
                         <div class="formElement">
                             <label for="telephone">Telephone:</label>
-                            <h:inputText required="true" id="telephone" requiredMessage="Please insert your telephone number!" />
+                            <h:inputText required="true" id="telephone" requiredMessage="Please insert your telephone number!" #{reservationManager.tel}/>
                             <h:message class="validation" for="telephone"/>
                         </div>
                     </fieldset>
@@ -60,22 +60,22 @@
                         <legend>Address</legend>
                         <div class="formElement">
                             <label for="street">Street:</label>
-                            <h:inputText required="true" id="street" requiredMessage="Please insert a street name!"/>
+                            <h:inputText required="true" id="street" requiredMessage="Please insert a street name!" #{reservationManager.street}/>
                             <h:message class="validation" for="street"/>
                         </div>
                         <div class="formElement">
                             <label for="postcode">Postcode:</label>
-                            <h:inputText required="true" id="postcode" requiredMessage="Please insert a postcode!"/>
+                            <h:inputText required="true" id="postcode" requiredMessage="Please insert a postcode!" #{reservationManager.postcode}/>
                             <h:message class="validation" for="postcode"/>
                         </div>
                         <div class="formElement">
                             <label for="country">Country:</label>
-                            <h:inputText required="true" id="country" requiredMessage="Please insert a country!"/>
+                            <h:inputText required="true" id="country" requiredMessage="Please insert a country!" #{reservationManager.country}/>
                             <h:message class="validation" for="country"/>
                         </div>
                         <div class="formElement">
                             <label for="city">City:</label>
-                            <h:inputText required="true" id="city" requiredMessage="Please insert a city!" />
+                            <h:inputText required="true" id="city" requiredMessage="Please insert a city!" #{reservationManager.city}/>
                             <h:message class="validation" for="city"/>
                         </div>
                     </fieldset>

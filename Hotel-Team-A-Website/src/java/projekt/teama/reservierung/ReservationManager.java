@@ -5,13 +5,18 @@
 package projekt.teama.reservierung;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import projekt.fhv.teama.classes.zimmer.IKategorie;
-import projekt.fhv.teama.classes.zimmer.Kategorie;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
+import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
+import projekt.fhv.teama.model.ModelZimmer;
 
 /**
  *
@@ -184,69 +189,79 @@ public class ReservationManager implements Serializable {
 
     public List<CategoryWrapper> getCategories() {
         List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
-        for (IKategorie category : KategorieDao.getInstance().getAll()) {
-            list.add(new CategoryWrapper(category, 0,getFreieZimmerAnzahl(category)));
+        try {
+            for (IKategorie category : KategorieDao.getInstance().getAll()) {
+                list.add(new CategoryWrapper(category, 0, getFreieZimmerAnzahl(category)));
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return list;
     }
+
     public Integer getFreieZimmerAnzahl(IKategorie category) {
-//        try {
-//        	java.sql.Date arival = new java.sql.Date(dateformatter.parse(getArrival()).getTime());
-//            java.sql.Date departure = new java.sql.Date(dateformatter.parse(departureDay + "/" + departureMonth + "/" + departureYear).getTime());
-//            
-//            ModelZimmer modelzimmer=new ModelZimmer();
-//            
-//          return  modelzimmer.getVerfügbareZimmer(category, arival, departure).size();
-        	
-            
-//        } catch (ParseException ex) {
-//            //TODO Auto-generated catch block
-//        	return 0;
-//        } catch (DatabaseException e) {
-//			// TODO Auto-generated catch block
-//        	return 0;
-//		}
-        
-        return 0;        	
+        try {
+            java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
+            java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
+            ModelZimmer modelzimmer = new ModelZimmer();
+
+            return modelzimmer.getVerfügbareZimmer(category, ar, de).size();
+
+        } catch (ParseException ex) {
+            return 0;
+        } catch (DatabaseException e) {
+            return 0;
+        }
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="CategoryWrapper">
     public class CategoryWrapper {
-        
+
         private IKategorie cat;
         private Integer chosenRooms;
         private Integer available;
-        
+
         public Integer getAvailable() {
             return available;
         }
-        
+
         public void setAvailable(Integer available) {
             this.available = available;
         }
-        
+
         public Integer getChosenRooms() {
             return chosenRooms;
         }
-        
+
         public void setChosenRooms(Integer chosenRooms) {
             this.chosenRooms = chosenRooms;
         }
-        
+
         public CategoryWrapper(IKategorie c, Integer a, Integer b) {
             this.cat = c;
             this.chosenRooms = a;
             this.available = b;
         }
-        
+
         public IKategorie getCat() {
             return cat;
         }
-        
+
         public void setCat(IKategorie cat) {
             this.cat = cat;
         }
     }
-}
+
+    private String dateAdapter(String str) {
+        String[] temp = new String[10];
+        String delimiter = "/";
+        temp = str.split(delimiter);
+        if(temp.length==3)
+        return temp[1] + "/" + temp[0] + "/" + temp[2];
+        else
+        return "20/10/1990";
+
+    }
 //</editor-fold>
+}
