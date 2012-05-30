@@ -69,9 +69,11 @@ public class ReservationManager implements Serializable {
     private Integer packageID = null;
     //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
-    // für alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
+    // fuer alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
     private List<CategoryWrapper> categories;
     
+    //Fuer den Hund
+    private boolean dog=false;
     
     //</editor-fold>
     
@@ -227,6 +229,26 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Dog">
+    public boolean isDog() {
+        return dog;
+    }
+    
+    public void setDog(boolean dog) {
+        this.dog = dog;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Set Gast">
+    public IGast getGast() {
+        return gast;
+    }
+    
+    public void setGast(IGast gast) {
+        this.gast = gast;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Schritte">
      public String stepOne() {
         return "reservation";
