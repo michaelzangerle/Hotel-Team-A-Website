@@ -37,13 +37,13 @@ import projekt.fhv.teama.model.interfaces.IModelLand;
 @SessionScoped
 public class ReservationManager implements Serializable {
 
-	//Funkt git jetzt
+    //<editor-fold defaultstate="collapsed" desc="Filds und Ko">
     //Zeitraum
     private String arrival;
     private String departure;
     //Gastdaten
     
-       //Gast
+    //Gast
     private IGast gast;
     private String firstname;
     private String lastname;
@@ -63,28 +63,32 @@ public class ReservationManager implements Serializable {
     //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
     // für alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
+    //</editor-fold>
     
- 
+    
+    //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
         try {
-          IGastDao g = GastDao.getInstance();
-          gast=g.getById(48);
-          
-          this.firstname=gast.getFirstname();
-          this.lastname=gast.getNachname();
-          this.email=gast.getEmail();
-          this.tel=gast.getTelefonnummer();
-          List<IAdresse> adr=new Vector<IAdresse>(gast.getAdressen());
-          this.street=adr.get(0).getStrasse();
-          this.postcode=adr.get(0).getPlz();
-          this.city=adr.get(0).getOrt();
-          this.country=adr.get(0).getLand().getID();
-          
+            IGastDao g = GastDao.getInstance();
+            gast=g.getById(48);
+            
+            this.firstname=gast.getFirstname();
+            this.lastname=gast.getNachname();
+            this.email=gast.getEmail();
+            this.tel=gast.getTelefonnummer();
+            List<IAdresse> adr=new Vector<IAdresse>(gast.getAdressen());
+            this.street=adr.get(0).getStrasse();
+            this.postcode=adr.get(0).getPlz();
+            this.city=adr.get(0).getOrt();
+            this.country=adr.get(0).getLand().getID();
+            
         } catch (Exception ex) {
             ex.printStackTrace();
             gast=null;
         }
     }
+    //</editor-fold>
+    
 
     //<editor-fold defaultstate="collapsed" desc="Timespan für den Aufenhalt">
     public String getArrival() {
@@ -215,12 +219,16 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Schritte">
-    public String stepOne() {
-        System.out.println("Test");
+    public String stepTwo() {
         return "reservation2";
     }
+        public String stepThree() {
+        return "reservation3";
+    }
+    
     //</editor-fold>
-
+    
+    //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
         List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
         try {
@@ -230,26 +238,44 @@ public class ReservationManager implements Serializable {
         } catch (DatabaseException ex) {
             Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return list;
     }
-
+    
     public Integer getAvailableRooms(IKategorie category) {
         try {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
             ModelZimmer modelzimmer = new ModelZimmer();
-
+            
             return modelzimmer.getVerfuegbareZimmer(category, ar, de).size();
-
+            
         } catch (ParseException ex) {
             return 0;
         } catch (DatabaseException e) {
             return 0;
         }
     }
+    
+      public List<CountryWrapper> getCountries()
+    {
+        ILandDao landDao=LandDao.getInstance();
+        List<ILand> countriesInDatabase=new Vector<ILand>();
+        List<CountryWrapper> countries=new Vector<CountryWrapper>();
+        try {
+           countriesInDatabase=new Vector<ILand>(landDao.getAll());
+            for (ILand country : countriesInDatabase) {
+                countries.add(new CountryWrapper(country.getID(), country.getBezeichnung()));
+            }
+           return countries;
+        } catch (DatabaseException ex) {
+           return countries;
+        }
+    }
+    
+    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="CategoryWrapper">
+    //<editor-fold defaultstate="collapsed" desc="Wrapper">
     public class CategoryWrapper {
 
         private IKategorie cat;
@@ -315,33 +341,22 @@ public class ReservationManager implements Serializable {
         
         
     }
+//</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Adapter">
     private String dateAdapter(String str) {
         String[] temp = new String[10];
         String delimiter = "/";
         temp = str.split(delimiter);
         if(temp.length==3)
-        return temp[1] + "/" + temp[0] + "/" + temp[2];
+            return temp[1] + "/" + temp[0] + "/" + temp[2];
         else
-        return "20/10/1990";
-
+            return "20/10/1990";
+        
     }
-//</editor-fold>
+    //</editor-fold>
+
 
     
-    public List<CountryWrapper> getCountries()
-    {
-        ILandDao landDao=LandDao.getInstance();
-        List<ILand> countriesInDatabase=new Vector<ILand>();
-        List<CountryWrapper> countries=new Vector<CountryWrapper>();
-        try {
-           countriesInDatabase=new Vector<ILand>(landDao.getAll());
-            for (ILand country : countriesInDatabase) {
-                countries.add(new CountryWrapper(country.getID(), country.getBezeichnung()));
-            }
-           return countries;
-        } catch (DatabaseException ex) {
-           return countries;
-        }
-    }
+  
 }

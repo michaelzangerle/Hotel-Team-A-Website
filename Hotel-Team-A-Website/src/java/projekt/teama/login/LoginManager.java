@@ -22,7 +22,7 @@ public class LoginManager {
     private boolean loggedin = false;
     
     @ManagedProperty(value = "#{reservationManager}")
-    private ReservationManager controller;
+    private ReservationManager reservationManager;
     
     public LoginManager() {
         
