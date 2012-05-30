@@ -15,10 +15,14 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projekt.fhv.teama.classes.leistungen.IZusatzleistung;
 import projekt.fhv.teama.classes.personen.IAdresse;
 import projekt.fhv.teama.classes.personen.Land;
 import projekt.fhv.teama.classes.personen.ILand;
 import projekt.fhv.teama.classes.personen.IGast;
+import projekt.fhv.teama.classes.zimmer.IZimmerpreis;
+import projekt.fhv.teama.hibernate.dao.leistungen.ILeistungDao;
+import projekt.fhv.teama.hibernate.dao.leistungen.ZusatzleistungDao;
 import projekt.fhv.teama.hibernate.dao.personen.GastDao;
 import projekt.fhv.teama.hibernate.dao.personen.IGastDao;
 import projekt.fhv.teama.hibernate.dao.personen.ILandDao;
@@ -28,6 +32,9 @@ import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
 import projekt.fhv.teama.model.ModelLand;
 import projekt.fhv.teama.model.interfaces.IModelLand;
+import projekt.fhv.teama.hibernate.dao.leistungen.IZusatzleistungDao;
+import projekt.fhv.teama.hibernate.dao.zimmer.IZimmerpreisDao;
+import projekt.fhv.teama.hibernate.dao.zimmer.ZimmerpreisDao;
 
 /**
  *
@@ -230,15 +237,27 @@ public class ReservationManager implements Serializable {
         public String stepThree() {
         return "reservation3";
     }
+        
+    public String finish()
+    {
+        return "index";
+    }
     
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
         categories= new ArrayList<CategoryWrapper>();
+        IZimmerpreisDao zpDao=ZimmerpreisDao.getInstance();
         try {
-            for (IKategorie category : KategorieDao.getInstance().getAll()) {
-                categories.add(new CategoryWrapper(category, 0, getAvailableRooms(category)));
+            for (IKategorie category : KategorieDao.getInstance().getAll()) {                
+           List<IZimmerpreis> zimmerpreise=new Vector<IZimmerpreis>(zpDao.getAll());
+           float preisOfKategorie=0.0f;
+            for (IZimmerpreis preis : zimmerpreise) {
+                if(preis.getKategorie().equals(category))
+                    preisOfKategorie=preis.getPreis();
+            }
+                categories.add(new CategoryWrapper(category, 0, getAvailableRooms(category),preisOfKategorie));
             }
         } catch (DatabaseException ex) {
             Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -252,7 +271,6 @@ public class ReservationManager implements Serializable {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
             ModelZimmer modelzimmer = new ModelZimmer();
-            
             return modelzimmer.getVerfuegbareZimmer(category, ar, de).size();
             
         } catch (ParseException ex) {
@@ -277,6 +295,23 @@ public class ReservationManager implements Serializable {
            return countries;
         }
     }
+      
+      public List<PackageWrapper> getPackages()
+      {
+        IZusatzleistungDao zbDao=ZusatzleistungDao.getInstance();
+        List<IZusatzleistung> packagesInDatabase=new Vector<IZusatzleistung>();
+        List<PackageWrapper> packages=new Vector<PackageWrapper>();
+        try {
+           packagesInDatabase=new Vector<IZusatzleistung>(zbDao.getAll());
+            for (IZusatzleistung p : packagesInDatabase) {
+                if(p.getWarengruppe().equals(11))
+                packages.add(new PackageWrapper(p, p.getID(), p.getBezeichnung()));
+            }
+           return packages;
+        } catch (DatabaseException ex) {
+           return packages;
+        }
+      }
     
     //</editor-fold>
 
@@ -286,6 +321,7 @@ public class ReservationManager implements Serializable {
         private IKategorie cat;
         private Integer chosenRooms;
         private Integer available;
+        private float cost;
 
         public Integer getAvailable() {
             return available;
@@ -303,10 +339,11 @@ public class ReservationManager implements Serializable {
             this.chosenRooms = chosenRooms;
         }
 
-        public CategoryWrapper(IKategorie c, Integer a, Integer b) {
+        public CategoryWrapper(IKategorie c, Integer a, Integer b,float co) {
             this.cat = c;
             this.chosenRooms = a;
             this.available = b;
+            this.cost=co;
         }
 
         public IKategorie getCat() {
@@ -316,9 +353,18 @@ public class ReservationManager implements Serializable {
         public void setCat(IKategorie cat) {
             this.cat = cat;
         }
+
+        public float getCost() {
+            return cost;
+        }
+
+        public void setCost(float cost) {
+            this.cost = cost;
+        }
+        
     }
 
-    public class CountryWrapper{
+    public class CountryWrapper {
     
         private Integer countryId;
         private String description;
@@ -342,10 +388,46 @@ public class ReservationManager implements Serializable {
 
         public void setDescription(String description) {
             this.description = description;
-        }
-        
-        
+        } 
     }
+    
+     public class PackageWrapper {
+
+        private IZusatzleistung packet;
+        private Integer packageID;
+        private String description;
+
+        public PackageWrapper(IZusatzleistung packet, Integer packageID, String description) {
+            this.packet = packet;
+            this.packageID = packageID;
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Integer getPackageID() {
+            return packageID;
+        }
+
+        public void setPackageID(Integer packageID) {
+            this.packageID = packageID;
+        }
+
+        public IZusatzleistung getPacket() {
+            return packet;
+        }
+
+        public void setPacket(IZusatzleistung packet) {
+            this.packet = packet;
+        }
+    }
+   
 //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Adapter">
