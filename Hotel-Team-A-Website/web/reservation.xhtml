@@ -20,6 +20,7 @@
                         <div class="formElement">
                             <label for="datepickerStart">Arrival</label>
                             <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+                            
                             <h:message class="validation" for="datepickerStart"/>
                         </div>
                         <div class="formElement">
@@ -74,7 +75,7 @@
                         </div>
                         <div class="formElement">
                             <label for="city">City:</label>
-                            <h:inputText required="true" id="city" requiredMessage="Please insert a city!"/>
+                            <h:inputText required="true" id="city" requiredMessage="Please insert a city!" />
                             <h:message class="validation" for="city"/>
                         </div>
                     </fieldset>

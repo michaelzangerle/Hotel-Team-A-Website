@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import projekt.fhv.teama.classes.zimmer.IKategorie;
+import projekt.fhv.teama.classes.zimmer.Kategorie;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,8 +40,9 @@ public class ReservationManager implements Serializable {
     private String accountnumber;
     //Packete
     private Integer packageID = null;
-    //Sonstiges
+    //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
+    // für alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
 
     public ReservationManager() {
     }
@@ -99,75 +103,73 @@ public class ReservationManager implements Serializable {
     public String getCity() {
         return city;
     }
-    
+
     public void setCity(String city) {
         this.city = city;
     }
-    
+
     public String getCountry() {
         return country;
     }
-    
+
     public void setCountry(String country) {
         this.country = country;
     }
-    
+
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getFirstname() {
         return firstname;
     }
-    
+
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-    
+
     public String getLastname() {
         return lastname;
     }
-    
+
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-    
+
     public String getPostcode() {
         return postcode;
     }
-    
+
     public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
-    
+
     public String getStreet() {
         return street;
     }
-    
+
     public void setStreet(String street) {
         this.street = street;
     }
-    
+
     public String getTel() {
         return tel;
     }
-    
+
     public void setTel(String tel) {
         this.tel = tel;
     }
     //</editor-fold>
 
-    
-    
     //<editor-fold defaultstate="collapsed" desc="Zusatzleistungen">
     public Integer getPackageID() {
         return packageID;
     }
-    
+
     public void setPackageID(Integer packageID) {
         this.packageID = packageID;
     }
@@ -208,22 +210,33 @@ public class ReservationManager implements Serializable {
 //        	
 //        	return 1;
 //    }
-    public class KategorieAuswahl {
+    public class CategoryWrapper {
 
         private IKategorie cat;
-        private Integer amount;
+        private Integer chosenRooms;
+        private Integer available;
 
-        public KategorieAuswahl(IKategorie c, Integer a) {
+        public Integer getAvailable() {
+            return available;
+        }
+
+        public void setAvailable(Integer available) {
+            this.available = available;
+        }
+
+        public Integer getChosenRooms() {
+            return chosenRooms;
+        }
+
+        public void setChosenRooms(Integer chosenRooms) {
+            this.chosenRooms = chosenRooms;
+        }
+
+
+
+        public CategoryWrapper(IKategorie c, Integer a) {
             this.cat = c;
-            this.amount = a;
-        }
-
-        public Integer getAmount() {
-            return amount;
-        }
-
-        public void setAmount(Integer amount) {
-            this.amount = amount;
+            this.chosenRooms = a;
         }
 
         public IKategorie getCat() {

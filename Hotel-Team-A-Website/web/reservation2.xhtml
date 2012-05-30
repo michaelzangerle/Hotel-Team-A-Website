@@ -8,11 +8,31 @@
     <ui:define name="content">
         <div class="container">
             <div class="sixteen columns add-bottom">
+
                 <h1>Reservation - Step 2
                     <span>Lorem ipsum dolor sit amet, per ne purto corpora, cu eam cetero dolores.</span>
                 </h1>
             </div>
-            <div class="sixteen columns"></div>
+            <div class="sixteen columns">
+                <h:form class="reservationForm">
+
+                    <h:dataTable value="${reservationManager.rooms}" var="e" class="contentTable">
+                        <h:column>
+                            <f:facet name="header">Category</f:facet>
+                            ${e.cat.bezeichnung} 
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Free Rooms</f:facet>
+                            ${e.free} 
+                        </h:column>
+<!--                        <h:column>
+                            <f:facet name="header">Your selection</f:facet>
+
+                        </h:column>-->
+                    </h:dataTable>
+                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 2" />
+                </h:form>
+            </div>
         </div>
     </ui:define>
 </ui:composition>
