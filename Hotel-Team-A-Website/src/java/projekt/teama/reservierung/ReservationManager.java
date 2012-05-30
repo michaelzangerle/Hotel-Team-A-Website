@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projekt.fhv.teama.classes.personen.IGast;
+import projekt.fhv.teama.hibernate.dao.personen.GastDao;
 import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
 import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
@@ -31,6 +33,9 @@ public class ReservationManager implements Serializable {
     private String arrival;
     private String departure;
     //Gastdaten
+    
+       //Gast
+    private IGast gast;
     private String firstname;
     private String lastname;
     private String email;
@@ -49,8 +54,15 @@ public class ReservationManager implements Serializable {
     //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
     // für alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
-
+    
+ 
     public ReservationManager() {
+        try {
+            gast=GastDao.getInstance().getById(48);
+            this.firstname=gast.getFirstname();
+        } catch (DatabaseException ex) {
+            gast=null;
+        }
     }
 
     //<editor-fold defaultstate="collapsed" desc="Timespan für den Aufenhalt">
