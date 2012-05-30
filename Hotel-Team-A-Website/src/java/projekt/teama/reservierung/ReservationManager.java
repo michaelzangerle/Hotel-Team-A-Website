@@ -225,7 +225,7 @@ public class ReservationManager implements Serializable {
         List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
         try {
             for (IKategorie category : KategorieDao.getInstance().getAll()) {
-                list.add(new CategoryWrapper(category, 0, getFreieZimmerAnzahl(category)));
+                list.add(new CategoryWrapper(category, 0, getAvailableRooms(category)));
             }
         } catch (DatabaseException ex) {
             Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,7 +234,7 @@ public class ReservationManager implements Serializable {
         return list;
     }
 
-    public Integer getFreieZimmerAnzahl(IKategorie category) {
+    public Integer getAvailableRooms(IKategorie category) {
         try {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
