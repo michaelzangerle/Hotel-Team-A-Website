@@ -78,7 +78,7 @@ public class ReservationManager implements Serializable {
           this.street=adr.get(0).getStrasse();
           this.postcode=adr.get(0).getPlz();
           this.city=adr.get(0).getOrt();
-          
+          this.country=adr.get(0).getLand().getID();
           
         } catch (Exception ex) {
             ex.printStackTrace();
