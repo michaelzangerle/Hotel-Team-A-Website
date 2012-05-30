@@ -73,7 +73,7 @@ public class ReservationManager implements Serializable {
     private List<CategoryWrapper> categories;
     
     //Fuer den Hund
-    private boolean dog=false;
+    private boolean pet=false;
     
     //</editor-fold>
     
@@ -230,12 +230,12 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Dog">
-    public boolean isDog() {
-        return dog;
+    public boolean getPet() {
+        return pet;
     }
     
-    public void setDog(boolean dog) {
-        this.dog = dog;
+    public void setPet(boolean pet) {
+        this.pet = pet;
     }
     //</editor-fold>
 
