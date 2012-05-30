@@ -63,6 +63,9 @@ public class ReservationManager implements Serializable {
     //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
     // für alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
+    private List<CategoryWrapper> categories;
+    
+    
     //</editor-fold>
     
     
@@ -88,8 +91,7 @@ public class ReservationManager implements Serializable {
         }
     }
     //</editor-fold>
-    
-
+   
     //<editor-fold defaultstate="collapsed" desc="Timespan für den Aufenhalt">
     public String getArrival() {
         return arrival;
@@ -233,16 +235,16 @@ public class ReservationManager implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
-        List<CategoryWrapper> list = new ArrayList<CategoryWrapper>();
+        categories= new ArrayList<CategoryWrapper>();
         try {
             for (IKategorie category : KategorieDao.getInstance().getAll()) {
-                list.add(new CategoryWrapper(category, 0, getAvailableRooms(category)));
+                categories.add(new CategoryWrapper(category, 0, getAvailableRooms(category)));
             }
         } catch (DatabaseException ex) {
             Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return list;
+        return categories;
     }
     
     public Integer getAvailableRooms(IKategorie category) {
