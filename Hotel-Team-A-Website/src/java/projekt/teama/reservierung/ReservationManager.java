@@ -257,6 +257,8 @@ public class ReservationManager implements Serializable {
         return "reservation2";
     }
         public String stepThree() {
+            
+            
         return "reservation3";
     }
         
@@ -326,7 +328,7 @@ public class ReservationManager implements Serializable {
         try {
            packagesInDatabase=new Vector<IZusatzleistung>(zbDao.getAll());
             for (IZusatzleistung p : packagesInDatabase) {
-                if(p.getWarengruppe().equals(11))
+                if(p.getWarengruppe().getID()==11)
                 packages.add(new PackageWrapper(p, p.getID(), p.getBezeichnung()));
             }
            return packages;
@@ -465,7 +467,19 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
-
+    private boolean testIfRoomSelected()
+    {
+        int count=0;
+        for (CategoryWrapper entry : categories) {
+            if(entry.getChosenRooms()==0)
+                count++;
+        }
+        
+        if(count>=categories.size())
+            return false;
+        
+        return true;
+    }
     
   
 }
