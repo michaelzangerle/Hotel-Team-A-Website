@@ -30,32 +30,39 @@
                             <h:message class="validation" for="datepickerEnd"/>
                         </div>
                     </fieldset>
-                    
+
                     <fieldset>
-                        <h:dataTable value="${reservationManager.categories}" var="e" class="contentTable">
+                        <h:dataTable value="${reservationManager.categories}" var="emo" class="contentTable">
                             <h:column>
                                 <f:facet name="header">Category</f:facet>
-                                ${e.cat.bezeichnung} 
+                                ${emo.cat.bezeichnung} 
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Price per Night</f:facet>
+                                <h:outputText value="#{emo.cost}">
+                                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" groupingUsed="false" />
+                            </h:outputText>
+                            €
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Free Rooms</f:facet>
-                                ${e.available} 
+                                ${emo.available} 
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Your selection</f:facet>
 
-                                <h:selectOneListbox label="Anzahl" size="1" value="#{e.chosenRooms}">
-<!--                                    <c:forEach begin="0" end="${e.available}" var="x">
-                                        <f:selectItem itemValue="${x}" itemLabel="${x}" />
-                                    </c:forEach>-->
-                                    <f:selectItems value="#{e.available}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
-<!--                                    <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>-->
+                                <h:selectOneListbox value="#{emo.chosenRooms}">
+                                    <c:forEach begin="0" end="#{emo.available}" var="a">
+                                        <f:selectItem itemLabel="#{a}" itemValue="#{a}" />
+                                    </c:forEach>
                                 </h:selectOneListbox>
+
 
                             </h:column>
                         </h:dataTable>
                     </fieldset>
-                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 3" />
+                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 1" />
+                    <h:commandButton action="#{reservationManager.stepThree()}" value="Step 3" />
                 </h:form>
                 <p><br /></p>
             </div>
