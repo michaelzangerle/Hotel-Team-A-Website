@@ -16,28 +16,48 @@
             <div class="sixteen columns">
                 <h:form class="reservationForm">
 
-                    <h:dataTable value="${reservationManager.getCategories()}" var="e" class="contentTable">
-                        <h:column>
-                            <f:facet name="header">Category</f:facet>
-                            ${e.cat.bezeichnung} 
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Free Rooms</f:facet>
-                            ${e.available} 
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Your selection</f:facet>
-                            
-                            <h:selectOneListbox label="Anzahl" size="1">
-                                <c:forEach begin="0" end="${e.available}" var="x">
-                                    <f:selectItem itemValue="${x}" itemLabel="${x}"/>
-                                </c:forEach>
-                            </h:selectOneListbox>
-                            
-                        </h:column>
-                    </h:dataTable>
+                    <fieldset>
+                        <legend>Timespan</legend>
+                        <div class="formElement">
+                            <label for="datepickerStart">Arrival</label>
+                            <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+
+                            <h:message class="validation" for="datepickerStart"/>
+                        </div>
+                        <div class="formElement">
+                            <label for="datepickerEnd">Departure</label>
+                            <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                            <h:message class="validation" for="datepickerEnd"/>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <h:dataTable value="${reservationManager.categories}" var="e" class="contentTable">
+                            <h:column>
+                                <f:facet name="header">Category</f:facet>
+                                ${e.cat.bezeichnung} 
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Free Rooms</f:facet>
+                                ${e.available} 
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Your selection</f:facet>
+
+                                <h:selectOneListbox label="Anzahl" size="1" value="#{e.chosenRooms}">
+<!--                                    <c:forEach begin="0" end="${e.available}" var="x">
+                                        <f:selectItem itemValue="${x}" itemLabel="${x}" />
+                                    </c:forEach>-->
+                                    <f:selectItems value="#{e.available}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
+<!--                                    <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>-->
+                                </h:selectOneListbox>
+
+                            </h:column>
+                        </h:dataTable>
+                    </fieldset>
                     <h:commandButton action="#{reservationManager.stepOne()}" value="Step 3" />
                 </h:form>
+                <p><br /></p>
             </div>
         </div>
     </ui:define>
