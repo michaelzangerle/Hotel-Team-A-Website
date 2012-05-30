@@ -20,47 +20,67 @@
                         <legend>Timespan</legend>
                         <div class="formElement">
                             <label for="datepickerStart">Arrival</label>
-                            <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+                            <h:inputText disabled="true" required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
 
                             <h:message class="validation" for="datepickerStart"/>
                         </div>
                         <div class="formElement">
                             <label for="datepickerEnd">Departure</label>
-                            <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                            <h:inputText disabled="true" required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
                             <h:message class="validation" for="datepickerEnd"/>
                         </div>
                     </fieldset>
 
                     <fieldset>
-                        <h:dataTable value="${reservationManager.categories}" var="emo" class="contentTable">
-                            <h:column>
-                                <f:facet name="header">Category</f:facet>
-                                ${emo.cat.bezeichnung} 
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Price per Night</f:facet>
-                                <h:outputText value="#{emo.cost}">
-                                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" groupingUsed="false" />
-                            </h:outputText>
-                            €
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Free Rooms</f:facet>
-                                ${emo.available} 
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Your selection</f:facet>
-
-                                <h:selectOneListbox value="#{emo.chosenRooms}">
-                                    <c:forEach begin="0" end="#{emo.available}" var="a">
-                                        <f:selectItem itemLabel="#{a}" itemValue="#{a}" />
-                                    </c:forEach>
-                                </h:selectOneListbox>
-
-
-                            </h:column>
-                        </h:dataTable>
+                        <legend>Rooms</legend>
+                        <table width="100%">
+                            <tr>
+                                <th>Category</th>
+                                <th>Price/Room</th>
+                                <th>Free Rooms</th>
+                                <th>Book</th>
+                            </tr>
+                            <c:forEach items="#{reservationManager.categories}" var="e">
+                                <tr>
+                                    <td>#{e.cat.bezeichnung}</td>
+                                    <td>                            
+                                        <h:outputText value="#{e.cost}">
+                                            <f:convertNumber maxFractionDigits="2" minFractionDigits="2" groupingUsed="false" />
+                                        </h:outputText>
+                                        €</td>
+                                    <td>#{e.available}</td>
+                                    <td>
+                                        <p class="select-width-110">
+                                            <h:selectOneMenu value="#{e.chosenRooms}">
+                                                <c:forEach begin="0" end="#{e.available}" var="a">
+                                                    <f:selectItem itemLabel="#{a}" itemValue="#{a}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
                     </fieldset>
+
+                    <fieldset>
+                        <legend>Package and Pets</legend>
+                        <div class="formElement">
+                            <label for="package">Package</label>
+                            <h:selectOneListbox id="package" size="1" required="true" requiredMessage="Please choose a package!" value="${reservationManager.packageID}">
+                                <f:selectItems value="${reservationManager.packages}" var="x" itemLabel="#{x.description}" itemValue="#{x.packageID}"/>
+                            </h:selectOneListbox>
+                            <h:message class="validation" for="package"/>
+                        </div>
+
+                        <div class="formElement">
+                            <label for="pet">Pet</label>
+                            <h:selectBooleanCheckbox id="pet" value="#{reservationManager.pet}" />
+                            <h:outputText value="Would you like sleep with your dog?"/>
+                        </div>
+
+                    </fieldset>
+
                     <h:commandButton action="#{reservationManager.stepOne()}" value="Step 1" />
                     <h:commandButton action="#{reservationManager.stepThree()}" value="Step 3" />
                 </h:form>
