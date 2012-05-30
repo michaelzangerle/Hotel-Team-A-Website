@@ -16,10 +16,10 @@
             <div class="sixteen columns">
                 <h:form class="reservationForm">
 
-                    <h:dataTable value="${reservationManager.rooms}" var="e" class="contentTable">
+                    <h:dataTable value="${reservationManager.getCategories()}" var="e" class="contentTable">
                         <h:column>
                             <f:facet name="header">Category</f:facet>
-                            ${e.cat.bezeichnung} 
+                            ${e.} 
                         </h:column>
                         <h:column>
                             <f:facet name="header">Free Rooms</f:facet>
