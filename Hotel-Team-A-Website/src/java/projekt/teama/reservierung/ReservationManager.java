@@ -63,12 +63,11 @@ public class ReservationManager implements Serializable {
  
     public ReservationManager() {
         try {
-//            IModelLand ml = new ModelLand();
-//            ILand l = ml.getLandByKuerzel("AT");
-//            this.country = l.getBezeichnung();
           IGastDao g = GastDao.getInstance();
           gast=g.getById(48);
-          this.firstname=gast.getFirstname();
+          
+          
+          
         } catch (Exception ex) {
             ex.printStackTrace();
             gast=null;
