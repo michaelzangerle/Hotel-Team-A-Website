@@ -4,38 +4,35 @@
  */
 package projekt.teama.reservierung;
 
-import com.sun.faces.facelets.tag.jstl.core.ForEachHandler;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import projekt.fhv.teama.classes.zimmer.IKategorie;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import projekt.fhv.teama.classes.leistungen.IZusatzleistung;
 import projekt.fhv.teama.classes.personen.IAdresse;
-import projekt.fhv.teama.classes.personen.Land;
-import projekt.fhv.teama.classes.personen.ILand;
 import projekt.fhv.teama.classes.personen.IGast;
+import projekt.fhv.teama.classes.personen.ILand;
+import projekt.fhv.teama.classes.zimmer.IKategorie;
 import projekt.fhv.teama.classes.zimmer.IZimmerpreis;
-import projekt.fhv.teama.hibernate.dao.leistungen.ILeistungDao;
+import projekt.fhv.teama.hibernate.dao.leistungen.IZusatzleistungDao;
 import projekt.fhv.teama.hibernate.dao.leistungen.ZusatzleistungDao;
 import projekt.fhv.teama.hibernate.dao.personen.GastDao;
 import projekt.fhv.teama.hibernate.dao.personen.IGastDao;
 import projekt.fhv.teama.hibernate.dao.personen.ILandDao;
 import projekt.fhv.teama.hibernate.dao.personen.LandDao;
+import projekt.fhv.teama.hibernate.dao.zimmer.IZimmerpreisDao;
 import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
+import projekt.fhv.teama.hibernate.dao.zimmer.ZimmerpreisDao;
 import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
-import projekt.fhv.teama.model.ModelLand;
-import projekt.fhv.teama.model.interfaces.IModelLand;
-import projekt.fhv.teama.hibernate.dao.leistungen.IZusatzleistungDao;
-import projekt.fhv.teama.hibernate.dao.zimmer.IZimmerpreisDao;
-import projekt.fhv.teama.hibernate.dao.zimmer.ZimmerpreisDao;
+import projekt.teama.reservierung.wrapper.CategoryWrapper;
+import projekt.teama.reservierung.wrapper.CountryWrapper;
+import projekt.teama.reservierung.wrapper.PackageWrapper;
 
 /**
  *
@@ -341,126 +338,7 @@ public class ReservationManager implements Serializable {
       }
     
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Wrapper">
-    public class CategoryWrapper {
-
-        private IKategorie cat;
-        private Integer chosenRooms;
-        private Integer available;
-        private float cost;
-
-        public Integer getAvailable() {
-            return available;
-        }
-
-        public void setAvailable(Integer available) {
-            this.available = available;
-        }
-
-        public Integer getChosenRooms() {
-            return chosenRooms;
-        }
-
-        public void setChosenRooms(Integer chosenRooms) {
-            this.chosenRooms = chosenRooms;
-            for (CategoryWrapper entry : categories) {
-                if(entry.getCat().getID() == this.cat.getID())
-                    entry.chosenRooms=this.chosenRooms;
-            }
-        }
-
-        public CategoryWrapper(IKategorie c, Integer a, Integer b,float co) {
-            this.cat = c;
-            this.chosenRooms = a;
-            this.available = b;
-            this.cost=co;
-        }
-
-        public IKategorie getCat() {
-            return cat;
-        }
-
-        public void setCat(IKategorie cat) {
-            this.cat = cat;
-        }
-
-        public float getCost() {
-            return cost;
-        }
-
-        public void setCost(float cost) {
-            this.cost = cost;
-        }
-        
-    }
-
-    public class CountryWrapper {
-    
-        private Integer countryId;
-        private String description;
-
-        public CountryWrapper(Integer countryId, String description) {
-            this.countryId = countryId;
-            this.description = description;
-        }
-
-        public Integer getCountryId() {
-            return countryId;
-        }
-
-        public void setCountryId(Integer countryId) {
-            this.countryId = countryId;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        } 
-    }
-    
-     public class PackageWrapper {
-
-        private IZusatzleistung packet;
-        private Integer packageID;
-        private String description;
-
-        public PackageWrapper(IZusatzleistung packet, Integer packageID, String description) {
-            this.packet = packet;
-            this.packageID = packageID;
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Integer getPackageID() {
-            return packageID;
-        }
-
-        public void setPackageID(Integer packageID) {
-            this.packageID = packageID;
-        }
-
-        public IZusatzleistung getPacket() {
-            return packet;
-        }
-
-        public void setPacket(IZusatzleistung packet) {
-            this.packet = packet;
-        }
-    }
    
-//</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Adapter">
     private String dateAdapter(String str) {
         String[] temp = new String[10];
