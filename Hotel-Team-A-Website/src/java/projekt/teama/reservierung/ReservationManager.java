@@ -72,6 +72,9 @@ public class ReservationManager implements Serializable {
     private boolean pet = false;
 
     //</editor-fold>
+    
+    
+    
     //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
         try {
@@ -353,6 +356,7 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Sonstiges">
     private boolean testIfRoomSelected() {
         int count = 0;
         for (CategoryWrapper entry : categories) {
@@ -360,11 +364,12 @@ public class ReservationManager implements Serializable {
                 count++;
             }
         }
-
+        
         if (count >= categories.size()) {
             return false;
         }
-
+        
         return true;
     }
+    //</editor-fold>
 }
