@@ -4,11 +4,13 @@
  */
 package projekt.teama.reservierung.wrapper;
 
+import java.io.Serializable;
+
 /**
  *
  * @author GIGI
  */
-    public class CountryWrapper {
+    public class CountryWrapper implements Serializable{
     
         private Integer countryId;
         private String description;

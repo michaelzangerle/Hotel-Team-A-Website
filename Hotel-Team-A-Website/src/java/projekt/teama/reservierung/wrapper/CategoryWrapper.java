@@ -4,13 +4,14 @@
  */
 package projekt.teama.reservierung.wrapper;
 
+import java.io.Serializable;
 import projekt.fhv.teama.classes.zimmer.IKategorie;
 
 /**
  *
  * @author GIGI
  */
-public class CategoryWrapper {
+public class CategoryWrapper implements Serializable{
 
         private IKategorie cat;
         private Integer chosenRooms;

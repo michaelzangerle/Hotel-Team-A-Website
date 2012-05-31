@@ -4,13 +4,14 @@
  */
 package projekt.teama.reservierung.wrapper;
 
+import java.io.Serializable;
 import projekt.fhv.teama.classes.leistungen.IZusatzleistung;
 
 /**
  *
  * @author GIGI
  */
- public class PackageWrapper {
+ public class PackageWrapper implements Serializable{
 
         private IZusatzleistung packet;
         private Integer packageID;
