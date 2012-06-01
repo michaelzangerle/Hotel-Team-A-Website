@@ -7,7 +7,9 @@ package projekt.teama.reservierung;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,17 +19,11 @@ import projekt.fhv.teama.classes.leistungen.IZusatzleistung;
 import projekt.fhv.teama.classes.personen.IAdresse;
 import projekt.fhv.teama.classes.personen.IGast;
 import projekt.fhv.teama.classes.personen.ILand;
-import projekt.fhv.teama.classes.zimmer.IKategorie;
-import projekt.fhv.teama.classes.zimmer.IZimmerpreis;
+import projekt.fhv.teama.classes.zimmer.*;
 import projekt.fhv.teama.hibernate.dao.leistungen.IZusatzleistungDao;
 import projekt.fhv.teama.hibernate.dao.leistungen.ZusatzleistungDao;
-import projekt.fhv.teama.hibernate.dao.personen.GastDao;
-import projekt.fhv.teama.hibernate.dao.personen.IGastDao;
-import projekt.fhv.teama.hibernate.dao.personen.ILandDao;
-import projekt.fhv.teama.hibernate.dao.personen.LandDao;
-import projekt.fhv.teama.hibernate.dao.zimmer.IZimmerpreisDao;
-import projekt.fhv.teama.hibernate.dao.zimmer.KategorieDao;
-import projekt.fhv.teama.hibernate.dao.zimmer.ZimmerpreisDao;
+import projekt.fhv.teama.hibernate.dao.personen.*;
+import projekt.fhv.teama.hibernate.dao.zimmer.*;
 import projekt.fhv.teama.hibernate.exceptions.DatabaseException;
 import projekt.fhv.teama.model.ModelZimmer;
 import projekt.teama.reservierung.wrapper.CategoryWrapper;
@@ -67,13 +63,11 @@ public class ReservationManager implements Serializable {
     //Sonstiges - Datum kommt als mm/dd/yyyy
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
     // fuer alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
-    private List<CategoryWrapper> categories=null;
+    private List<CategoryWrapper> categories = null;
     //Fuer den Hund
     private boolean pet = false;
 
     //</editor-fold>
-    
-    
     
     //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
@@ -115,40 +109,6 @@ public class ReservationManager implements Serializable {
         this.departure = departure;
     }
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Kontodaten">
-    public String getAccountnumber() {
-        return accountnumber;
-    }
-
-    public void setAccountnumber(String accountnumber) {
-        this.accountnumber = accountnumber;
-    }
-
-    public String getBic() {
-        return bic;
-    }
-
-    public void setBic(String bic) {
-        this.bic = bic;
-    }
-
-    public String getBlz() {
-        return blz;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public void setBlz(String blz) {
-        this.blz = blz;
-    }
-//</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Gastdaten">
     public String getCity() {
@@ -252,7 +212,13 @@ public class ReservationManager implements Serializable {
     }
 
     public String stepTwo() {
-        return "reservation2";
+        if (checkDate()) {
+            return "reservation2";
+        } else {
+            setArrival("");
+            setDeparture("");
+            return "reservation";
+        }
     }
 
     public String stepThree() {
@@ -265,14 +231,18 @@ public class ReservationManager implements Serializable {
     }
 
     public String finish() {
-        return "index";
+        if (saveReservationInDB()) {
+            return "index";
+        } else {
+            return "rooms";
+        }
     }
 
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
-       if (categories == null) {
+        if (categories == null) {
             categories = new Vector<CategoryWrapper>();
             IZimmerpreisDao zpDao = ZimmerpreisDao.getInstance();
             try {
@@ -289,7 +259,7 @@ public class ReservationManager implements Serializable {
             } catch (DatabaseException ex) {
                 Logger.getLogger(ReservationManager.class.getName()).log(Level.SEVERE, null, ex);
             }
-       }
+        }
 
         return categories;
     }
@@ -364,12 +334,104 @@ public class ReservationManager implements Serializable {
                 count++;
             }
         }
-        
+
         if (count >= categories.size()) {
             return false;
         }
-        
+
         return true;
     }
+
+   
+    private boolean checkDate() {
+
+        try {
+            java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
+            java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
+
+            if (ar.after(de)) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (ParseException ex) {
+            return false;
+        }
+    }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Speicher Methode">
+    private boolean saveReservationInDB() {
+        if (gast != null) {
+            try {
+                //Adresse Updaten
+                List<IAdresse> adrs = new Vector<IAdresse>(gast.getAdressen());
+                adrs.get(0).setStrasse(this.street);
+                adrs.get(0).setPlz(this.postcode);
+                adrs.get(0).setOrt(this.city);
+                ILand land = LandDao.getInstance().getById(this.country);
+                adrs.get(0).setLand(land);
+                //DB aktion Adresse
+                IAdresseDao adressDao = AdresseDao.getInstance();
+                adressDao.update(adrs.get(0));
+                
+                //Gast Updaten
+                this.gast.setVorname(this.firstname);
+                this.gast.setNachname(this.lastname);
+                this.gast.setEmail(this.email);
+                this.gast.setTelefonnummer(this.tel);
+                
+                //DB aktion Gast
+                IGastDao gastDao = GastDao.getInstance();
+                gastDao.create(this.gast);
+                
+                //Reservierung erstellen;
+                
+                //Datum fuer die Reservierung
+                java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
+                java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
+                
+                //Zusatzleistung
+                IZusatzleistungDao zlDao = ZusatzleistungDao.getInstance();
+                IZusatzleistung pack = zlDao.getById(this.packageID);
+                
+                //Gäste der Reservierung hinzufügen
+                Set<IGast> gaeste = new HashSet<IGast>();
+                gaeste.add(this.gast);
+                
+                //Reservierung
+                IReservierung res = new Reservierung(ar, de, gast, null, false, this.pet, pack, null, null, gaeste, null);
+                
+                IReservierungDao resDao = ReservierungDao.getInstance();
+                resDao.create(res);
+                
+                //Teilreservierungen
+                ITeilreservierungDao teilresDao = TeilreservierungDao.getInstance();
+                for (CategoryWrapper entry : this.categories) {
+                    if(entry.getChosenRooms()>0)
+                    {
+                    ITeilreservierung tres = new Teilreservierung(entry.getCat(), res, entry.getChosenRooms());
+                    try {
+                        teilresDao.create(tres);
+                    } catch (DatabaseException ex) {
+                        return false;
+                    }
+                    }
+                }
+                
+                return true;
+                
+            } catch (DatabaseException ex) {
+                return false;
+            } catch (ParseException e) {
+                return false;
+            }
+            
+        }
+        
+        return false;
+    }
+    //</editor-fold>
+
 }
