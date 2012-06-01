@@ -244,7 +244,7 @@ public class ReservationManager implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();  
             HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();  
             HttpSession session=((HttpServletRequest)request).getSession();
-            session.setAttribute("ErrorLogin", "Database Saving Error");
+            session.setAttribute("ErrorSave", "Database Saving Error");
             return "reservation3";
         }
     }
