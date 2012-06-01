@@ -61,6 +61,10 @@
                                 </tr>
                             </c:forEach>
                         </table>
+                        
+                       <c:if test="#{sessionScope.NoRoomSelected}">
+                            <p class="validation">Please select a room to complete the reservation.</p>
+                        </c:if>
                     </fieldset>
 
                     <fieldset>

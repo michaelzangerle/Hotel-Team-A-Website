@@ -71,6 +71,7 @@ p.lead{ color:#777; font-size:21px; line-height:27px;}
 em{ font-style:italic;}
 strong{ color:#333; font-weight:bold;}
 small{ font-size:80%;}
+b {font-weight: bold;}
 
 blockquote,blockquote p{ color:#777; font-size:17px; font-style:italic; line-height:24px;}
 blockquote{ border-left:1px solid #ddd; margin:0 0 20px; padding:9px 20px 0 19px;}

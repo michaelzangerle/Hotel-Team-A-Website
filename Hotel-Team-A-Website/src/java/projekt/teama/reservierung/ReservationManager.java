@@ -4,6 +4,7 @@
  */
 package projekt.teama.reservierung;
 
+import com.sun.faces.facelets.tag.jstl.core.ForEachHandler;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +42,7 @@ import projekt.teama.reservierung.wrapper.PackageWrapper;
 @SessionScoped
 public class ReservationManager implements Serializable {
 
-    //<editor-fold defaultstate="collapsed" desc="Filds und Ko">
+    //<editor-fold defaultstate="collapsed" desc="Fields und Ko">
     //Zeitraum
     private String arrival;
     private String departure;
@@ -57,10 +58,6 @@ public class ReservationManager implements Serializable {
     private String postcode;
     private Integer country;
     private String city;
-    private String iban;
-    private String bic;
-    private String blz;
-    private String accountnumber;
     //Packete
     private Integer packageID = null;
     //Sonstiges - Datum kommt als mm/dd/yyyy
@@ -69,9 +66,12 @@ public class ReservationManager implements Serializable {
     private List<CategoryWrapper> categories = null;
     //Fuer den Hund
     private boolean pet = false;
+    // fuer schritt 3
+    private double totalCosts;
+    private long days;
+    private HttpSession session;
 
     //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
         try {
@@ -87,6 +87,10 @@ public class ReservationManager implements Serializable {
             this.postcode = adr.get(0).getPlz();
             this.city = adr.get(0).getOrt();
             this.country = adr.get(0).getLand().getID();
+
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            this.session = ((HttpServletRequest) request).getSession();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -211,46 +215,43 @@ public class ReservationManager implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Schritte">
     public String stepOne() {
+        clearAttributes();
         return "reservation";
     }
 
     public String stepTwo() {
+        clearAttributes();
         if (checkDate()) {
             return "reservation2";
         } else {
-            setArrival("");
-            setDeparture("");
-            FacesContext context = FacesContext.getCurrentInstance();  
-            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();  
-            HttpSession session=((HttpServletRequest)request).getSession();
-            session.setAttribute("DateError", "Arrival Date after Departure Date");
+            this.session.setAttribute("DateError", true);
             return "reservation";
         }
     }
 
     public String stepThree() {
-
+        clearAttributes();
         if (testIfRoomSelected()) {
+            calcTotalCosts();
             return "reservation3";
         } else {
+            this.session.setAttribute("NoRoomSelected", true);
             return "reservation2";
         }
     }
 
     public String finish() {
+        clearAttributes();
         if (saveReservationInDB()) {
-            return "index";
+            this.session.setAttribute("Confirmed", true);
+            return "reservation3";
         } else {
-            FacesContext context = FacesContext.getCurrentInstance();  
-            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();  
-            HttpSession session=((HttpServletRequest)request).getSession();
-            session.setAttribute("ErrorSave", "Database Saving Error");
+            session.setAttribute("ErrorSave", true);
             return "reservation3";
         }
     }
 
     //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
         if (categories == null) {
@@ -322,7 +323,6 @@ public class ReservationManager implements Serializable {
     }
 
     //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Adapter">
     private String dateAdapter(String str) {
         String[] temp = new String[10];
@@ -353,17 +353,20 @@ public class ReservationManager implements Serializable {
         return true;
     }
 
-   
     private boolean checkDate() {
+
+        java.sql.Date today = new java.sql.Date(new java.util.Date().getTime());
 
         try {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
             java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
 
-            if (ar.after(de)) {
-                return false;
-            } else {
+            this.days = ((de.getTime() - ar.getTime()) / 1000 / 60 / 60 / 24) + 1;
+
+            if (de.after(ar) && ar.after(today)) {
                 return true;
+            } else {
+                return false;
             }
 
         } catch (ParseException ex) {
@@ -371,7 +374,7 @@ public class ReservationManager implements Serializable {
         }
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Speicher Methode">
     private boolean saveReservationInDB() {
         if (gast != null) {
@@ -386,63 +389,100 @@ public class ReservationManager implements Serializable {
                 //DB aktion Adresse
                 IAdresseDao adressDao = AdresseDao.getInstance();
                 adressDao.update(adrs.get(0));
-                
+
                 //Gast Updaten
                 this.gast.setVorname(this.firstname);
                 this.gast.setNachname(this.lastname);
                 this.gast.setEmail(this.email);
                 this.gast.setTelefonnummer(this.tel);
-                
+
                 //DB aktion Gast
                 IGastDao gastDao = GastDao.getInstance();
                 gastDao.create(this.gast);
-                
+
                 //Reservierung erstellen;
-                
+
                 //Datum fuer die Reservierung
                 java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
                 java.sql.Date de = new java.sql.Date(dateformatter.parse(dateAdapter(getDeparture())).getTime());
-                
+
                 //Zusatzleistung
                 IZusatzleistungDao zlDao = ZusatzleistungDao.getInstance();
                 IZusatzleistung pack = zlDao.getById(this.packageID);
-                
+
                 //Gäste der Reservierung hinzufügen
                 Set<IGast> gaeste = new HashSet<IGast>();
                 gaeste.add(this.gast);
-                
+
                 //Reservierung
                 IReservierung res = new Reservierung(ar, de, gast, null, false, this.pet, pack, null, null, gaeste, null);
-                
+
                 IReservierungDao resDao = ReservierungDao.getInstance();
                 resDao.create(res);
-                
+
                 //Teilreservierungen
                 ITeilreservierungDao teilresDao = TeilreservierungDao.getInstance();
                 for (CategoryWrapper entry : this.categories) {
-                    if(entry.getChosenRooms()>0)
-                    {
-                    ITeilreservierung tres = new Teilreservierung(entry.getCat(), res, entry.getChosenRooms());
-                    try {
-                        teilresDao.create(tres);
-                    } catch (DatabaseException ex) {
-                        return false;
-                    }
+                    if (entry.getChosenRooms() > 0) {
+                        ITeilreservierung tres = new Teilreservierung(entry.getCat(), res, entry.getChosenRooms());
+                        try {
+                            teilresDao.create(tres);
+                        } catch (DatabaseException ex) {
+                            return false;
+                        }
                     }
                 }
-                
+
                 return true;
-                
+
             } catch (DatabaseException ex) {
                 return false;
             } catch (ParseException e) {
                 return false;
             }
-            
+
         }
-        
+
         return false;
     }
     //</editor-fold>
 
+    private void calcTotalCosts() {
+        float costs = 0;
+
+        // Kosten pro Zimmer
+        for (CategoryWrapper c : categories) {
+            costs += c.getCost() * c.getChosenRooms();
+        }
+
+        // Package
+        costs += 0;
+
+        // Anzahl der Tage        
+        this.totalCosts = costs * days;
+    }
+
+    public long getDays() {
+        return days;
+    }
+
+    public void setDays(long days) {
+        this.days = days;
+    }
+
+    public double getTotalCosts() {
+        return totalCosts;
+    }
+
+    public void setTotalCosts(double totalCosts) {
+        this.totalCosts = totalCosts;
+    }
+
+    private void clearAttributes() {
+        
+        this.session.setAttribute("DateError", false);
+        this.session.setAttribute("Confirmed", false);
+        this.session.setAttribute("ErrorSave", false);
+        this.session.setAttribute("NoRoomSelected", false);
+    }
 }

@@ -32,6 +32,11 @@
                             <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
                             <h:message class="validation" for="datepickerEnd"/>
                         </div>
+                        
+                        <c:if test="${sessionScope.DateError}">
+                            <p class="validation">Warning: The date of arrival has to be before the date of departure and both dates have to be in future.</p>
+                        </c:if>
+                        
                     </fieldset>
                     <hr />
 
