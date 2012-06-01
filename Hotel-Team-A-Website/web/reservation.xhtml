@@ -130,7 +130,7 @@
                             <h:message class="validation" for="username"/>
 
                             <label for="password">Password</label>
-                            <h:inputText required="true" id="password" requiredMessage="Please insert your password!" value="#{loginManager.password}"/>
+                            <h:inputSecret required="true" id="password" requiredMessage="Please insert your password!" value="#{loginManager.password}"/>
                             <h:message class="validation" for="password"/>
                             <h:commandButton action="#{loginManager.checkLogin()}" value="Login" />
                         </c:if>
