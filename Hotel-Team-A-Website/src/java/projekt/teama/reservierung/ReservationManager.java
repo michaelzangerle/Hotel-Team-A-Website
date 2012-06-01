@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import projekt.fhv.teama.classes.leistungen.IZusatzleistung;
 import projekt.fhv.teama.classes.personen.IAdresse;
 import projekt.fhv.teama.classes.personen.IGast;
@@ -217,6 +220,10 @@ public class ReservationManager implements Serializable {
         } else {
             setArrival("");
             setDeparture("");
+            FacesContext context = FacesContext.getCurrentInstance();  
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();  
+            HttpSession session=((HttpServletRequest)request).getSession();
+            session.setAttribute("DateError", "Arrival Date after Departure Date");
             return "reservation";
         }
     }
@@ -234,7 +241,11 @@ public class ReservationManager implements Serializable {
         if (saveReservationInDB()) {
             return "index";
         } else {
-            return "rooms";
+            FacesContext context = FacesContext.getCurrentInstance();  
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();  
+            HttpSession session=((HttpServletRequest)request).getSession();
+            session.setAttribute("ErrorLogin", "Database Saving Error");
+            return "reservation3";
         }
     }
 
