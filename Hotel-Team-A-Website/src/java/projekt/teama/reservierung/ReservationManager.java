@@ -67,7 +67,11 @@ public class ReservationManager implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
-
+        
+        this.address = null;
+        this.country = null;
+        this.guest = null;
+                
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         this.session = ((HttpServletRequest) request).getSession();

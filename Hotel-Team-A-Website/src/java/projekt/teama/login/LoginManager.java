@@ -28,7 +28,6 @@ public class LoginManager {
     private String password;
     private IGast guest;
     private HttpSession session;
-    
     @ManagedProperty(value = "#{reservationManager}")
     private ReservationManager reservationManager;
     //</editor-fold>
@@ -56,13 +55,16 @@ public class LoginManager {
     public String logOut() {
         this.useremail = "";
         this.password = "";
-        this.session.removeAttribute("loggedIn");
-        this.session.removeAttribute("guest");
+
+
 
         // Nullpointer beim logout
-        this.reservationManager.setGuest(null);
-        this.reservationManager.setAddress(null);
-        this.reservationManager.setCountry(null);
+//        this.reservationManager.setGuest(null);
+//        this.reservationManager.setAddress(null);
+//        this.reservationManager.setCountry(null);
+
+        this.session.removeAttribute("loggedIn");
+        this.session.removeAttribute("guest");
         return "reservation";
     }
 
