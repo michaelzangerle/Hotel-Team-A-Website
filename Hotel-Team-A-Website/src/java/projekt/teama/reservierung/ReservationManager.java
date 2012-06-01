@@ -71,6 +71,8 @@ public class ReservationManager implements Serializable {
         this.address = null;
         this.country = null;
         this.guest = null;
+        this.arrival = "";
+        this.departure = "";
                 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
