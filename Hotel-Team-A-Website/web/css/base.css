@@ -253,7 +253,7 @@ textarea{ min-height:60px;}
 label,legend{ display:block; font-size:13px; font-weight:bold;}
 input[type="checkbox"]{ display:inline;}
 label span,legend span{ color:#444; font-size:13px; font-weight:normal;}
-#check_avail{ background-color:#f2f6f8; border:1px solid #cdd5da; padding:11px; position:relative;}
+#login, #support, #check_avail{ background-color:#f2f6f8; border:1px solid #cdd5da; padding:11px; position:relative;}
 .col_f_1{ display:block; float:left; margin-right:10px; width:120px;}
 .col_f_2{ display:block; float:left; width:110px;}
 label{ color:#626262; display:block; font-size:15px;}

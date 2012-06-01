@@ -38,7 +38,7 @@
                                 <tr>
                                     <td><b>Personal Information</b></td>
                                     <td>${reservationManager.firstname}<br/>${reservationManager.lastname}<br/>${reservationManager.email}</td>
-                                    <td>${reservationManager.street}<br/>${reservationManager.postcode} ${reservationManager.city}<br/>${reservationManager.country}</td>
+                                    <td>${reservationManager.street}<br/>${reservationManager.postcode} ${reservationManager.city}<br/>${reservationManager.getLand()}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Your Vacation</b></td>
@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <td><b>Addtional Information</b></td>
-                                    <td>Package: ${reservationManager.packageID}</td>
+                                    <td>${reservationManager.getPackage()}</td>
                                     <td>
                                         <c:if test="${reservationManager.pet}">
                                             With pet.

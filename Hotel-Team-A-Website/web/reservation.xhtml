@@ -32,11 +32,11 @@
                             <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
                             <h:message class="validation" for="datepickerEnd"/>
                         </div>
-                        
+
                         <c:if test="${sessionScope.DateError}">
                             <p class="validation">Warning: The date of arrival has to be before the date of departure and both dates have to be in future.</p>
                         </c:if>
-                        
+
                     </fieldset>
                     <hr />
 
@@ -99,6 +99,43 @@
             </div>
 
             <section class="five columns omega">
+
+                <!-- start check login-->
+                <div id="login" class="add-bottom">
+                    <h3>Login for online services</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, pellentesque amet adipiscing scelerisque, vitae urna aenean.
+                    </p>
+
+                    <h:form class="reservationForm">
+                        
+                        <c:if test="${!loginManager.loggedin}">
+                            <label for="username">E-Mail Adress</label>
+                            <h:inputText required="true" id="username" requiredMessage="Please insert your mail adress!" value="#{loginManager.useremail}"/>
+                            <h:message class="validation" for="username"/>
+
+                            <label for="password">Password</label>
+                            <h:inputText required="true" id="password" requiredMessage="Please insert your password!" value="#{loginManager.password}"/>
+                            <h:message class="validation" for="password"/>
+                            <h:commandButton action="#{loginManager.checkLogin()}" value="Login" />
+                        </c:if>
+                        
+                        <c:if test="${loginManager.loggedin}">
+                            <p>You are logged in with this adress <strong>#{loginManager.useremail}</strong>!</p>
+                                <h:commandButton action="#{loginManager.logOut()}" value="Logout" />
+                        </c:if>
+                        
+                    </h:form>
+
+                </div><!-- end check login-->
+
+                <div id="support" class="add-bottom">
+                    <h3>Technical Support</h3>
+                    <p>0044 439 4243 <br/>
+                        tec@paradise-hotel.com</p>
+                    <p>Lorem ipsum dolor sit amet, pellentesque amet adipiscing scelerisque, vitae urna aenean.</p>
+                </div>
+
 
                 <!-- start check avail-->
                 <div id="check_avail" class="add-bottom">

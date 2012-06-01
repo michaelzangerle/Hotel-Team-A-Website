@@ -25,6 +25,7 @@ import projekt.fhv.teama.classes.personen.IGast;
 import projekt.fhv.teama.classes.personen.ILand;
 import projekt.fhv.teama.classes.zimmer.*;
 import projekt.fhv.teama.hibernate.dao.leistungen.IZusatzleistungDao;
+import projekt.fhv.teama.hibernate.dao.leistungen.LeistungDao;
 import projekt.fhv.teama.hibernate.dao.leistungen.ZusatzleistungDao;
 import projekt.fhv.teama.hibernate.dao.personen.*;
 import projekt.fhv.teama.hibernate.dao.zimmer.*;
@@ -479,10 +480,32 @@ public class ReservationManager implements Serializable {
     }
 
     private void clearAttributes() {
-        
+
         this.session.setAttribute("DateError", false);
         this.session.setAttribute("Confirmed", false);
         this.session.setAttribute("ErrorSave", false);
         this.session.setAttribute("NoRoomSelected", false);
+    }
+
+    public String getLand() {
+        if (this.country != null) {
+            try {
+                return LandDao.getInstance().getById(this.country).getBezeichnung();
+            } catch (Exception ex) {
+                return ex.getMessage();
+            }
+        }
+        return "0";
+    }
+
+    public String getPackage() {
+        if (this.packageID != null) {
+            try {
+                return LeistungDao.getInstance().getById(this.packageID).getBezeichnung();
+            } catch (Exception ex) {
+                return ex.getMessage();
+            }
+        }
+        return "0";
     }
 }
