@@ -4,7 +4,6 @@
  */
 package projekt.teama.reservierung;
 
-import com.sun.faces.facelets.tag.jstl.core.ForEachHandler;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,25 +42,17 @@ import projekt.teama.reservierung.wrapper.PackageWrapper;
 @SessionScoped
 public class ReservationManager implements Serializable {
 
-    //<editor-fold defaultstate="collapsed" desc="Fields und Ko">
+    //<editor-fold defaultstate="collapsed" desc="Fields und co">
     //Zeitraum
     private String arrival;
     private String departure;
     //Gastdaten
-    //Gast
-    private IGast gast;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String tel;
-    //Addressdaten
-    private String street;
-    private String postcode;
+    private IGast guest;
+    private IAdresse address;
     private Integer country;
-    private String city;
     //Packete
     private Integer packageID = null;
-    //Sonstiges - Datum kommt als mm/dd/yyyy
+    //Sonstiges
     private SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
     // fuer alle kategorien ein element mit kategorienamen und anzahl der freien zimmer
     private List<CategoryWrapper> categories = null;
@@ -73,30 +64,14 @@ public class ReservationManager implements Serializable {
     private HttpSession session;
 
     //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Konstuktoren">
     public ReservationManager() {
-        try {
-            IGastDao g = GastDao.getInstance();
-            gast = g.getById(48);
 
-            this.firstname = gast.getFirstname();
-            this.lastname = gast.getNachname();
-            this.email = gast.getEmail();
-            this.tel = gast.getTelefonnummer();
-            List<IAdresse> adr = new Vector<IAdresse>(gast.getAdressen());
-            this.street = adr.get(0).getStrasse();
-            this.postcode = adr.get(0).getPlz();
-            this.city = adr.get(0).getOrt();
-            this.country = adr.get(0).getLand().getID();
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        this.session = ((HttpServletRequest) request).getSession();
 
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            this.session = ((HttpServletRequest) request).getSession();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            gast = null;
-        }
     }
     //</editor-fold>
 
@@ -118,72 +93,6 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Gastdaten">
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Integer getCountry() {
-        return country;
-    }
-
-    public void setCountry(Integer country) {
-        this.country = country;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-    //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc="Zusatzleistungen">
     public Integer getPackageID() {
         return packageID;
@@ -201,16 +110,6 @@ public class ReservationManager implements Serializable {
 
     public void setPet(boolean pet) {
         this.pet = pet;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Set Gast">
-    public IGast getGast() {
-        return gast;
-    }
-
-    public void setGast(IGast gast) {
-        this.gast = gast;
     }
     //</editor-fold>
 
@@ -253,6 +152,7 @@ public class ReservationManager implements Serializable {
     }
 
     //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
     public List<CategoryWrapper> getCategories() {
         if (categories == null) {
@@ -324,6 +224,7 @@ public class ReservationManager implements Serializable {
     }
 
     //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Adapter">
     private String dateAdapter(String str) {
         String[] temp = new String[10];
@@ -338,7 +239,7 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Sonstiges">
+    //<editor-fold defaultstate="collapsed" desc="Datums und Raumeingaben überprüfen">
     private boolean testIfRoomSelected() {
         int count = 0;
         for (CategoryWrapper entry : categories) {
@@ -378,28 +279,24 @@ public class ReservationManager implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Speicher Methode">
     private boolean saveReservationInDB() {
-        if (gast != null) {
+        if (guest != null) {
             try {
-                //Adresse Updaten
-                List<IAdresse> adrs = new Vector<IAdresse>(gast.getAdressen());
-                adrs.get(0).setStrasse(this.street);
-                adrs.get(0).setPlz(this.postcode);
-                adrs.get(0).setOrt(this.city);
+
+                //Adresse Updaten  
                 ILand land = LandDao.getInstance().getById(this.country);
-                adrs.get(0).setLand(land);
+                this.address.setLand(land);
+
+                List<IAdresse> adrs = new Vector<IAdresse>(this.guest.getAdressen());
+                IAdresse a1 = adrs.get(0);
+                a1 = this.address;
+
                 //DB aktion Adresse
                 IAdresseDao adressDao = AdresseDao.getInstance();
-                adressDao.update(adrs.get(0));
-
-                //Gast Updaten
-                this.gast.setVorname(this.firstname);
-                this.gast.setNachname(this.lastname);
-                this.gast.setEmail(this.email);
-                this.gast.setTelefonnummer(this.tel);
+                adressDao.update(this.address);
 
                 //DB aktion Gast
                 IGastDao gastDao = GastDao.getInstance();
-                gastDao.create(this.gast);
+                gastDao.create(this.guest);
 
                 //Reservierung erstellen;
 
@@ -413,10 +310,10 @@ public class ReservationManager implements Serializable {
 
                 //Gäste der Reservierung hinzufügen
                 Set<IGast> gaeste = new HashSet<IGast>();
-                gaeste.add(this.gast);
+                gaeste.add(this.guest);
 
                 //Reservierung
-                IReservierung res = new Reservierung(ar, de, gast, null, false, this.pet, pack, null, null, gaeste, null);
+                IReservierung res = new Reservierung(ar, de, guest, null, false, this.pet, pack, null, null, gaeste, null);
 
                 IReservierungDao resDao = ReservierungDao.getInstance();
                 resDao.create(res);
@@ -448,6 +345,64 @@ public class ReservationManager implements Serializable {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Set/Get Gast">
+    public IGast getGuest() {
+        return guest;
+    }
+
+    public void setGuest(IGast gast) {
+        this.guest = gast;
+
+        List<IAdresse> adrs = new Vector<IAdresse>(this.guest.getAdressen());
+        this.address = adrs.get(0);
+
+        this.country = this.address.getLand().getID();
+
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getter und setter">
+    public Integer getCountry() {
+        return this.country;
+    }
+    
+    public void setCountry(Integer country) {
+        this.country = country;
+    }
+    
+    public long getDays() {
+        return days;
+    }
+    
+    public void setDays(long days) {
+        this.days = days;
+    }
+    
+    public double getTotalCosts() {
+        return totalCosts;
+    }
+    
+    public void setTotalCosts(double totalCosts) {
+        this.totalCosts = totalCosts;
+    }
+    
+    public IAdresse getAddress() {
+        return address;
+    }
+    
+    public void setAddress(IAdresse address) {
+        this.address = address;
+    }
+    //</editor-fold>
+
+    private void clearAttributes() {
+
+        this.session.setAttribute("DateError", false);
+        this.session.setAttribute("Confirmed", false);
+        this.session.setAttribute("ErrorSave", false);
+        this.session.setAttribute("NoRoomSelected", false);
+    }
+
     private void calcTotalCosts() {
         float costs = 0;
 
@@ -463,30 +418,7 @@ public class ReservationManager implements Serializable {
         this.totalCosts = costs * days;
     }
 
-    public long getDays() {
-        return days;
-    }
-
-    public void setDays(long days) {
-        this.days = days;
-    }
-
-    public double getTotalCosts() {
-        return totalCosts;
-    }
-
-    public void setTotalCosts(double totalCosts) {
-        this.totalCosts = totalCosts;
-    }
-
-    private void clearAttributes() {
-
-        this.session.setAttribute("DateError", false);
-        this.session.setAttribute("Confirmed", false);
-        this.session.setAttribute("ErrorSave", false);
-        this.session.setAttribute("NoRoomSelected", false);
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="Bezeichnung für Land und Package holen">
     public String getLand() {
         if (this.country != null) {
             try {
@@ -508,4 +440,5 @@ public class ReservationManager implements Serializable {
         }
         return "0";
     }
+    //</editor-fold>
 }

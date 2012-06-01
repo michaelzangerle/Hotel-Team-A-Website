@@ -15,15 +15,25 @@
             </div>
             <div class="sixteen columns">
 
-                <h3>Confirmation</h3>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <c:if test="${!sessionScope.loggedIn}">
+                    <h2>You have to be logged in to make an reservation!</h2>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
 
-                <c:if test="${sessionScope.Confirmed}">
+                    <h3>Questions?</h3>
+                    <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. </p>
+                </c:if>
+
+                <c:if test="${sessionScope.loggedIn and sessionScope.Confirmed eq null}">
+                    <h3>Confirmation</h3>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                </c:if>
+
+                <c:if test="${sessionScope.loggedIn and sessionScope.Confirmed}">
                     <h2>Reservation successfully completed!</h2>
                     <p class="">You will recive a confirmation by mail in the next few minutes.</p>
                 </c:if>
 
-                <c:if test="${!sessionScope.Confirmed}">
+                <c:if test="${sessionScope.loggedIn and !sessionScope.Confirmed}">
                     <h:form class="reservationForm">
 
                         <fieldset>
@@ -37,8 +47,8 @@
                                 </tr>
                                 <tr>
                                     <td><b>Personal Information</b></td>
-                                    <td>${reservationManager.firstname}<br/>${reservationManager.lastname}<br/>${reservationManager.email}</td>
-                                    <td>${reservationManager.street}<br/>${reservationManager.postcode} ${reservationManager.city}<br/>${reservationManager.getLand()}</td>
+                                    <td>${reservationManager.guest.firstname}<br/>${reservationManager.guest.nachname}<br/>${reservationManager.guest.email}</td>
+                                    <td>${reservationManager.address.strasse}<br/>${reservationManager.address.plz} ${reservationManager.address.ort}<br/>${reservationManager.getLand()}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Your Vacation</b></td>
@@ -85,6 +95,7 @@
                         <h:commandButton action="#{reservationManager.finish()}" value="Finish" />
                     </h:form>
                 </c:if>
+
                 <p><br /></p>
             </div>
         </div>

@@ -14,79 +14,89 @@
                 </h1>
             </div>
             <div class="sixteen columns">
-                <h:form class="reservationForm">
+                <c:if test="${sessionScope.loggedIn}">
+                    <h:form class="reservationForm">
 
-                    <fieldset>
-                        <legend>Timespan</legend>
-                        <div class="formElement">
-                            <label for="datepickerStart">Arrival</label>
-                            <h:inputText disabled="true" required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+                        <fieldset>
+                            <legend>Timespan</legend>
+                            <div class="formElement">
+                                <label for="datepickerStart">Arrival</label>
+                                <h:inputText disabled="true" required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
 
-                            <h:message class="validation" for="datepickerStart"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="datepickerEnd">Departure</label>
-                            <h:inputText disabled="true" required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
-                            <h:message class="validation" for="datepickerEnd"/>
-                        </div>
-                    </fieldset>
+                                <h:message class="validation" for="datepickerStart"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="datepickerEnd">Departure</label>
+                                <h:inputText disabled="true" required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                                <h:message class="validation" for="datepickerEnd"/>
+                            </div>
+                        </fieldset>
 
-                    <fieldset>
-                        <legend>Rooms</legend>
-                        <table width="100%">
-                            <tr>
-                                <th>Category</th>
-                                <th>Price/Room</th>
-                                <th>Free Rooms</th>
-                                <th>Book</th>
-                            </tr>
-                            <c:forEach items="#{reservationManager.categories}" var="e">
+                        <fieldset>
+                            <legend>Rooms</legend>
+                            <table width="100%">
                                 <tr>
-                                    <td>#{e.cat.bezeichnung}</td>
-                                    <td>                            
-                                        <h:outputText value="#{e.cost}">
-                                            <f:convertNumber maxFractionDigits="2" minFractionDigits="2" groupingUsed="false" />
-                                        </h:outputText>
-                                        €</td>
-                                    <td>#{e.available}</td>
-                                    <td>
-                                        <p class="select-width-110">
-                                            <h:selectOneMenu value="#{e.chosenRooms}">
-                                                <c:forEach begin="0" end="#{e.available}" var="a">
-                                                    <f:selectItem itemLabel="#{a}" itemValue="#{a}" />
-                                                </c:forEach>
-                                            </h:selectOneMenu>
-                                        </p>
-                                    </td>
+                                    <th>Category</th>
+                                    <th>Price/Room</th>
+                                    <th>Free Rooms</th>
+                                    <th>Book</th>
                                 </tr>
-                            </c:forEach>
-                        </table>
-                        
-                       <c:if test="#{sessionScope.NoRoomSelected}">
-                            <p class="validation">Please select a room to complete the reservation.</p>
-                        </c:if>
-                    </fieldset>
+                                <c:forEach items="#{reservationManager.categories}" var="e">
+                                    <tr>
+                                        <td>#{e.cat.bezeichnung}</td>
+                                        <td>                            
+                                            <h:outputText value="#{e.cost}">
+                                                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" groupingUsed="false" />
+                                            </h:outputText>
+                                            €</td>
+                                        <td>#{e.available}</td>
+                                        <td>
+                                            <p class="select-width-110">
+                                                <h:selectOneMenu value="#{e.chosenRooms}">
+                                                    <c:forEach begin="0" end="#{e.available}" var="a">
+                                                        <f:selectItem itemLabel="#{a}" itemValue="#{a}" />
+                                                    </c:forEach>
+                                                </h:selectOneMenu>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
 
-                    <fieldset>
-                        <legend>Package and Pets</legend>
-                        <div class="formElement">
-                            <label for="package">Package</label>
-                            <h:selectOneListbox id="package" size="1" required="true" requiredMessage="Please choose a package!" value="${reservationManager.packageID}">
-                                <f:selectItems value="${reservationManager.packages}" var="x" itemLabel="#{x.description}" itemValue="#{x.packageID}"/>
-                            </h:selectOneListbox>
-                            <h:message class="validation" for="package"/>
-                        </div>
+                            <c:if test="#{sessionScope.NoRoomSelected}">
+                                <p class="validation">Please select a room to complete the reservation.</p>
+                            </c:if>
+                        </fieldset>
 
-                        <div class="formElement">
-                            <label for="pet">Wanna sleep with your pet?</label>
-                            <h:selectBooleanCheckbox id="pet" value="#{reservationManager.pet}" />
-                        </div>
+                        <fieldset>
+                            <legend>Package and Pets</legend>
+                            <div class="formElement">
+                                <label for="package">Package</label>
+                                <h:selectOneListbox id="package" size="1" required="true" requiredMessage="Please choose a package!" value="${reservationManager.packageID}">
+                                    <f:selectItems value="${reservationManager.packages}" var="x" itemLabel="#{x.description}" itemValue="#{x.packageID}"/>
+                                </h:selectOneListbox>
+                                <h:message class="validation" for="package"/>
+                            </div>
 
-                    </fieldset>
+                            <div class="formElement">
+                                <label for="pet">Wanna sleep with your pet?</label>
+                                <h:selectBooleanCheckbox id="pet" value="#{reservationManager.pet}" />
+                            </div>
 
-                    <h:commandButton action="#{reservationManager.stepOne()}" value="Step 1" />
-                    <h:commandButton action="#{reservationManager.stepThree()}" value="Step 3" />
-                </h:form>
+                        </fieldset>
+
+                        <h:commandButton action="#{reservationManager.stepOne()}" value="Step 1" />
+                        <h:commandButton action="#{reservationManager.stepThree()}" value="Step 3" />
+                    </h:form>
+                </c:if>
+                <c:if test="${!sessionScope.loggedIn}">
+                    <h2>You have to be logged in to make an reservation!</h2>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
+
+                    <h3>Questions?</h3>
+                    <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. </p>
+                </c:if>
+
                 <p><br /></p>
             </div>
         </div>

@@ -14,85 +14,96 @@
             </div>
             <div class="eleven columns">
 
-                <h3>Hint</h3>
+                <c:if test="${sessionScope.loggedIn}">
+                    
+                    <h3>Hint</h3>
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                    
+                    <h:form class="reservationForm">
 
-                <h:form class="reservationForm">
+                        <fieldset>
+                            <legend>Timespan</legend>
+                            <div class="formElement">
+                                <label for="datepickerStart">Arrival</label>
+                                <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
 
-                    <fieldset>
-                        <legend>Timespan</legend>
-                        <div class="formElement">
-                            <label for="datepickerStart">Arrival</label>
-                            <h:inputText required="true" class="special" requiredMessage="Please insert a date of arrival!" id="datepickerStart" value="#{reservationManager.arrival}"/>
+                                <h:message class="validation" for="datepickerStart"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="datepickerEnd">Departure</label>
+                                <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
+                                <h:message class="validation" for="datepickerEnd"/>
+                            </div>
 
-                            <h:message class="validation" for="datepickerStart"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="datepickerEnd">Departure</label>
-                            <h:inputText required="true" requiredMessage="Please insert a date of departure!" class="special" id="datepickerEnd" value="#{reservationManager.departure}"/>
-                            <h:message class="validation" for="datepickerEnd"/>
-                        </div>
+                            <c:if test="${sessionScope.DateError}">
+                                <p class="validation">Warning: The date of arrival has to be before the date of departure and both dates have to be in future.</p>
+                            </c:if>
 
-                        <c:if test="${sessionScope.DateError}">
-                            <p class="validation">Warning: The date of arrival has to be before the date of departure and both dates have to be in future.</p>
-                        </c:if>
+                        </fieldset>
+                        <hr />
 
-                    </fieldset>
-                    <hr />
+                        <fieldset>
+                            <legend>Personal Information</legend>
+                            <div class="formElement">
+                                <label for="firstname">Firstname:</label>
+                                <h:inputText required="true" id="firstname" requiredMessage="Please insert your firstname!" value="#{reservationManager.guest.vorname}"/>
+                                <h:message class="validation" for="firstname"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="lastname">Lastname:</label>
+                                <h:inputText required="true" id="lastname" requiredMessage="Please insert your lastname!" value="#{reservationManager.guest.nachname}"/>
+                                <h:message class="validation" for="lastname"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="email">E-Mail:</label>
+                                <h:inputText required="true" id="email" requiredMessage="Please insert your mail adress!" value="#{reservationManager.guest.email}"/>
+                                <h:message class="validation" for="email"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="telephone">Telephone:</label>
+                                <h:inputText required="true" id="telephone" requiredMessage="Please insert your telephone number!" value="#{reservationManager.guest.telefonnummer}"/>
+                                <h:message class="validation" for="telephone"/>
+                            </div>
+                        </fieldset>
+                        <hr />
 
-                    <fieldset>
-                        <legend>Personal Information</legend>
-                        <div class="formElement">
-                            <label for="firstname">Firstname:</label>
-                            <h:inputText required="true" id="firstname" requiredMessage="Please insert your firstname!" value="#{reservationManager.firstname}"/>
-                            <h:message class="validation" for="firstname"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="lastname">Lastname:</label>
-                            <h:inputText required="true" id="lastname" requiredMessage="Please insert your lastname!" value="#{reservationManager.lastname}"/>
-                            <h:message class="validation" for="lastname"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="email">E-Mail:</label>
-                            <h:inputText required="true" id="email" requiredMessage="Please insert your mail adress!" value="#{reservationManager.email}"/>
-                            <h:message class="validation" for="email"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="telephone">Telephone:</label>
-                            <h:inputText required="true" id="telephone" requiredMessage="Please insert your telephone number!" value="#{reservationManager.tel}"/>
-                            <h:message class="validation" for="telephone"/>
-                        </div>
-                    </fieldset>
-                    <hr />
+                        <fieldset>
+                            <legend>Address</legend>
+                            <div class="formElement">
+                                <label for="street">Street:</label>
+                                <h:inputText required="true" id="street" requiredMessage="Please insert a street name!" value="#{reservationManager.address.strasse}"/>
+                                <h:message class="validation" for="street"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="postcode">Postcode:</label>
+                                <h:inputText required="true" id="postcode" requiredMessage="Please insert a postcode!" value="#{reservationManager.address.plz}"/>
+                                <h:message class="validation" for="postcode"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="country">Country:</label>
+                                <h:selectOneListbox label="country" size="1" required="true" requiredMessage="Please insert a country!" value="${reservationManager.country}">
+                                    <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
+                                </h:selectOneListbox>
+                                <h:message class="validation" for="country"/>
+                            </div>
+                            <div class="formElement">
+                                <label for="city">City:</label>
+                                <h:inputText required="true" id="city" requiredMessage="Please insert a city!" value="#{reservationManager.address.ort}"/>
+                                <h:message class="validation" for="city"/>
+                            </div>
+                        </fieldset>
 
-                    <fieldset>
-                        <legend>Address</legend>
-                        <div class="formElement">
-                            <label for="street">Street:</label>
-                            <h:inputText required="true" id="street" requiredMessage="Please insert a street name!" value="#{reservationManager.street}"/>
-                            <h:message class="validation" for="street"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="postcode">Postcode:</label>
-                            <h:inputText required="true" id="postcode" requiredMessage="Please insert a postcode!" value="#{reservationManager.postcode}"/>
-                            <h:message class="validation" for="postcode"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="country">Country:</label>
-                            <h:selectOneListbox label="country" size="1" required="true" requiredMessage="Please insert a country!" value="${reservationManager.country}">
-                                <f:selectItems value="${reservationManager.countries}" var="x" itemLabel="#{x.description}" itemValue="#{x.countryId}"/>
-                            </h:selectOneListbox>
-                            <h:message class="validation" for="country"/>
-                        </div>
-                        <div class="formElement">
-                            <label for="city">City:</label>
-                            <h:inputText required="true" id="city" requiredMessage="Please insert a city!" value="#{reservationManager.city}"/>
-                            <h:message class="validation" for="city"/>
-                        </div>
-                    </fieldset>
+                        <h:commandButton action="#{reservationManager.stepTwo()}" value="Step 2" />
+                    </h:form>
+                </c:if>
 
-                    <h:commandButton action="#{reservationManager.stepTwo()}" value="Step 2" />
-                </h:form>
+                <c:if test="${!sessionScope.loggedIn}">
+                    <h2>You have to be logged in to make an reservation!</h2>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
+
+                    <h3>Questions?</h3>
+                    <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. </p>
+                </c:if>
 
                 <p><br /></p>
 
@@ -102,14 +113,18 @@
 
                 <!-- start check login-->
                 <div id="login" class="add-bottom">
-                    <h3>Login for online services</h3>
+                    <h3>Login for our online services!</h3>
                     <p>
                         Lorem ipsum dolor sit amet, pellentesque amet adipiscing scelerisque, vitae urna aenean.
                     </p>
 
+                    <c:if test="${sessionScope.loggedIn eq false}">
+                        <p class="validation">No guest with the entered data found!</p>
+                    </c:if>
+
                     <h:form class="reservationForm">
-                        
-                        <c:if test="${!loginManager.loggedin}">
+
+                        <c:if test="${!sessionScope.loggedIn}">
                             <label for="username">E-Mail Adress</label>
                             <h:inputText required="true" id="username" requiredMessage="Please insert your mail adress!" value="#{loginManager.useremail}"/>
                             <h:message class="validation" for="username"/>
@@ -119,12 +134,12 @@
                             <h:message class="validation" for="password"/>
                             <h:commandButton action="#{loginManager.checkLogin()}" value="Login" />
                         </c:if>
-                        
-                        <c:if test="${loginManager.loggedin}">
-                            <p>You are logged in with this adress <strong>#{loginManager.useremail}</strong>!</p>
-                                <h:commandButton action="#{loginManager.logOut()}" value="Logout" />
+
+                        <c:if test="${sessionScope.loggedIn}">
+                            <p>You are logged in with this adress <strong>#{reservationManager.guest.email}</strong>!</p>
+                            <h:commandButton action="#{loginManager.logOut()}" value="Logout" />
                         </c:if>
-                        
+
                     </h:form>
 
                 </div><!-- end check login-->
