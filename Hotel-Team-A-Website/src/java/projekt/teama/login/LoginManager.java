@@ -66,11 +66,6 @@ public class LoginManager {
         this.useremail = "";
         this.password = "";
 
-        // Nullpointer beim logout
-//        this.reservationManager.setGuest(null);
-//        this.reservationManager.setAddress(null);
-//        this.reservationManager.setCountry(null);
-
         this.session.removeAttribute("loggedIn");
         this.session.removeAttribute("guest");
         return "reservation";
