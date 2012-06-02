@@ -17,7 +17,9 @@ import projekt.teama.reservierung.ReservationManager;
 
 /**
  *
- * @author GIGI
+ * @author Team-A
+ * Erstellt am 01.06.2012
+ * Bean fuer die Steuerung des Login Vorgangen
  */
 @ManagedBean
 @SessionScoped
@@ -38,6 +40,10 @@ public class LoginManager {
         this.session = ((HttpServletRequest) request).getSession();
     }
 
+    /**
+     * Methode um zu Ueberpruefen ob ein Gast sich erfolgreich einloggen kann
+     * @return String
+     */
     public String checkLogin() {
 
         boolean validLoginData = getGuest();
@@ -52,11 +58,13 @@ public class LoginManager {
         return "reservation";
     }
 
+    /**
+     * Methode um sich wieder auszuloggen
+     * @return 
+     */
     public String logOut() {
         this.useremail = "";
         this.password = "";
-
-
 
         // Nullpointer beim logout
 //        this.reservationManager.setGuest(null);
@@ -69,31 +77,58 @@ public class LoginManager {
     }
 
     //<editor-fold defaultstate="collapsed" desc="getter und setter">
+    /**
+     * Getter fuer das Password
+     * @return String
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Setter fuer das Password
+     * @param password 
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Getter fuer den Username  (Email)
+     * @return String
+     */
     public String getUseremail() {
         return useremail;
     }
-
+    /**
+     * Setter fuer den Username (Email)
+     * @param useremail 
+     */
     public void setUseremail(String useremail) {
         this.useremail = useremail;
     }
 
+    /**
+     * Getter fuer den ReservationManager
+     * @return ReservationManager
+     */
     public ReservationManager getReservationManager() {
         return reservationManager;
     }
 
+    /**
+     * Setter fuer den Reservation Manager
+     * @param reservationManager 
+     */
     public void setReservationManager(ReservationManager reservationManager) {
         this.reservationManager = reservationManager;
     }
     //</editor-fold>
 
+    /**
+     * Methode um einen Gast aus der Datenbank anhand seines Passwortes und seines Usernamens
+     * @return boolean
+     */
     private boolean getGuest() {
 
         try {

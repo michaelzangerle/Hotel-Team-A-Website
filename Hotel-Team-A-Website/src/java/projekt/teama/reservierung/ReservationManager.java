@@ -36,7 +36,9 @@ import projekt.teama.reservierung.wrapper.PackageWrapper;
 
 /**
  *
- * @author mike
+ * @author Team-A
+ * Erstellt am 26.05.2012
+ * Bean zur steuerung des Reservierungs UseCases
  */
 @ManagedBean
 @SessionScoped
@@ -85,49 +87,83 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Timespan für den Aufenhalt">
+    /**
+     * Getter fuer das Anreisedatum
+     * @return String
+     */
     public String getArrival() {
         return arrival;
     }
-
+    /**
+     * Settter fuer das Anreisedatum
+     * @param arrival 
+     */
     public void setArrival(String arrival) {
         this.arrival = arrival;
     }
-
+    /**
+     * Getter fuer das Abreisedatum
+     * @return String
+     */
     public String getDeparture() {
         return departure;
     }
-
+    /**
+     * Setter fuer das Abreisedatum
+     * @param departure 
+     */
     public void setDeparture(String departure) {
         this.departure = departure;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Zusatzleistungen">
+    /**
+     * Getter fuer die PaketeID
+     * @return Integer
+     */
     public Integer getPackageID() {
         return packageID;
     }
-
+    /**
+     * Getter fuer die PacketID
+     * @param packageID 
+     */
     public void setPackageID(Integer packageID) {
         this.packageID = packageID;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Dog">
+    /**
+     * Getter fuer die Haustiere
+     * @return boolean
+     */
     public boolean getPet() {
         return pet;
     }
-
+    /**
+     * Setter fuer die Haustiere
+     * @param pet 
+     */
     public void setPet(boolean pet) {
         this.pet = pet;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Schritte">
+    /**
+     * Methode fuer die Weiterleitung zum ersten Schritt
+     * @return String
+     */
     public String stepOne() {
         clearAttributes();
         return "reservation";
     }
-
+    /**
+     * Methode fuer die Weiterleitung zum zweiten Schritt
+     * @return String
+     */
     public String stepTwo() {
         clearAttributes();
         if (checkDate()) {
@@ -137,7 +173,10 @@ public class ReservationManager implements Serializable {
             return "reservation";
         }
     }
-
+    /**
+     * Methode fuer die Weiterleitung zum dritten Schritt
+     * @return String
+     */
     public String stepThree() {
         clearAttributes();
         if (testIfRoomSelected()) {
@@ -148,7 +187,10 @@ public class ReservationManager implements Serializable {
             return "reservation2";
         }
     }
-
+    /**
+     * Methode fuer die Weiterleitung zum letzten Schritt
+     * @return String
+     */
     public String finish() {
         clearAttributes();
         if (saveReservationInDB()) {
@@ -163,6 +205,10 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Methode um Daten aus der DB zu holen">
+    /**
+     * Methode um die Kategorien aus der Datenbank zu erhalten
+     * @return List<CategoryWrapper>
+     */
     public List<CategoryWrapper> getCategories() {
         if (categories == null) {
             categories = new Vector<CategoryWrapper>();
@@ -185,7 +231,11 @@ public class ReservationManager implements Serializable {
 
         return categories;
     }
-
+    /**
+     * Methode um die verfuegbaren Zimmeranzahl fuer eine Kategorie zu erhalten
+     * @param category
+     * @return Integer
+     */
     public Integer getAvailableRooms(IKategorie category) {
         try {
             java.sql.Date ar = new java.sql.Date(dateformatter.parse(dateAdapter(getArrival())).getTime());
@@ -199,7 +249,10 @@ public class ReservationManager implements Serializable {
             return 0;
         }
     }
-
+    /**
+     * Methode um alle Laender aus der DB zu holen
+     * @return List<CountryWrapper>
+     */
     public List<CountryWrapper> getCountries() {
         ILandDao landDao = LandDao.getInstance();
         List<ILand> countriesInDatabase = new Vector<ILand>();
@@ -214,7 +267,10 @@ public class ReservationManager implements Serializable {
             return countries;
         }
     }
-
+    /**
+     * Methode um Pakete wie Vollpension und Ko aus der DB zu holen
+     * @return List<PackageWrapper>
+     */
     public List<PackageWrapper> getPackages() {
         IZusatzleistungDao zbDao = ZusatzleistungDao.getInstance();
         List<IZusatzleistung> packagesInDatabase = new Vector<IZusatzleistung>();
@@ -235,6 +291,11 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Adapter">
+    /**
+     * Adapter um ein Englisches Datum in ein Deutsches Datum zu konvertieren
+     * @param str
+     * @return String
+     */
     private String dateAdapter(String str) {
         String[] temp = new String[10];
         String delimiter = "/";
@@ -249,6 +310,10 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Datums und Raumeingaben überprüfen">
+   /**
+    * Methode zur Ueberpruefung ob auch Zimmer ausgewaehlt wuerden
+    * @return boolean
+    */
     private boolean testIfRoomSelected() {
         int count = 0;
         for (CategoryWrapper entry : categories) {
@@ -287,6 +352,10 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Speicher Methode">
+    /**
+     * Methoder zur speicherung der Reservierung in die DB
+     * @return boolean
+     */
     private boolean saveReservationInDB() {
         if (guest != null) {
             try {
@@ -355,10 +424,17 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Set/Get Gast">
+    /**
+     * Getter fuer den Gast
+     * @return IGast
+     */
     public IGast getGuest() {
         return guest;
     }
-
+    /**
+     * Setter fuer den Gast
+     * @param gast 
+     */
     public void setGuest(IGast gast) {
         this.guest = gast;
 
@@ -371,63 +447,102 @@ public class ReservationManager implements Serializable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="getter und setter">
+    /**
+     * Getter fuer die LandID
+     * @return Integer
+     */
     public Integer getCountry() {
         return this.country;
     }
-    
+    /**
+     * Setter fuer die LandID
+     * @param country 
+     */
     public void setCountry(Integer country) {
         this.country = country;
     }
-    
+    /**
+     * Methode um die Aufenhaltsdauer in Tagen zu erhalten
+     * @return long
+     */
     public long getDays() {
         return days;
     }
-    
+     /**
+     * Methode um die Aufenhaltsdauer in Tagen zu setzen
+     * @param days 
+     */
     public void setDays(long days) {
         this.days = days;
     }
-    
+    /**
+     * Methode um die Gesamtkosten abzufragen
+     * @return double
+     */
     public double getTotalCosts() {
         return totalCosts;
     }
-    
+    /**
+     * Methode um die Gesamtkosten zu setzen
+     * @param totalCosts 
+     */
     public void setTotalCosts(double totalCosts) {
         this.totalCosts = totalCosts;
     }
-    
+    /**
+     * etter fuer die Adresse
+     * @return IAdresse
+     */
     public IAdresse getAddress() {
         return address;
     }
-    
+    /**
+     * Setter fuer die Adresse
+     * @param address 
+     */
     public void setAddress(IAdresse address) {
         this.address = address;
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Clear Methoden">
+    /**
+     * Methode um die Attribute zu löschen
+     */
     private void clearAttributes() {
-
+        
         this.session.setAttribute("DateError", false);
         this.session.setAttribute("Confirmed", false);
         this.session.setAttribute("ErrorSave", false);
         this.session.setAttribute("NoRoomSelected", false);
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Kosten berechnungs Methoden">
+    /**
+     * Methode um die Kosten zu berechnen
+     */
     private void calcTotalCosts() {
         float costs = 0;
-
+        
         // Kosten pro Zimmer
         for (CategoryWrapper c : categories) {
             costs += c.getCost() * c.getChosenRooms();
         }
-
+        
         // Package
         costs += 0;
-
-        // Anzahl der Tage        
+        
+        // Anzahl der Tage
         this.totalCosts = costs * days;
     }
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Bezeichnung für Land und Package holen">
+    /**
+     * Methode um ein Land anhand einer ID aus der DB zu holen
+     * @return String
+     */
     public String getLand() {
         if (this.country != null) {
             try {
@@ -438,7 +553,10 @@ public class ReservationManager implements Serializable {
         }
         return "0";
     }
-
+    /**
+     * Methode um ein Paket anhand einer ID aus der DB zu holen
+     * @return String
+     */
     public String getPackage() {
         if (this.packageID != null) {
             try {
