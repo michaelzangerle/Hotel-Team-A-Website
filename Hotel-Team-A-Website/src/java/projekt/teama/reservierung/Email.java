@@ -66,7 +66,7 @@ public class Email {
         
         String sBody = headerFrom + headerTo +"\n\n"+ salutation + "You have successfully reservated:\n\n" + sb.toString() + "\n\nfrom " + arrival + " to " + departure + "\n";
         sBody=sBody+"\n\nYou have choosen the following options:\n" + aPackage + "\n" + optionPet + "\n\nTotal costs = " + totalCosts + "Euro";
-        sBody+= "\n\nYours sincerely\nParadise Hotel\n\nIf you have any questions please feel free to contact us!";
+        sBody+= "\n\nYours sincerely\nParadise Hotel\n\nIf you have any questions feel free to contact us!";
         
         Properties prop = System.getProperties();
         

@@ -201,7 +201,7 @@ public class ReservationManager implements Serializable {
             }
             else
             {
-               session.setAttribute("ErrorSave", true);
+               session.setAttribute("ErrorMail", true);
                return "reservation3"; 
             }
         } else {
