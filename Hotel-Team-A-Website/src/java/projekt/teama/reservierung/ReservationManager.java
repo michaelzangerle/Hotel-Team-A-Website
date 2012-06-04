@@ -194,8 +194,16 @@ public class ReservationManager implements Serializable {
     public String finish() {
         clearAttributes();
         if (saveReservationInDB()) {
+            if(new Email().sendMail(this.guest,this.categories,this.pet,this.getPackage(),this.arrival,this.departure,this.address,this.getLand(),this.totalCosts))
+            {
             this.session.setAttribute("Confirmed", true);
             return "reservation3";
+            }
+            else
+            {
+               session.setAttribute("ErrorSave", true);
+               return "reservation3"; 
+            }
         } else {
             session.setAttribute("ErrorSave", true);
             return "reservation3";
